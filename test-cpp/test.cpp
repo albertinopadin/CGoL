@@ -2,7 +2,7 @@
 #include <GLFW/glfw3.h>
 
 
-// From: youtube.com/watch?v=
+// From: https://www.youtube.com/watch?v=7I0eNh2XdvA
 
 int main()
 {
