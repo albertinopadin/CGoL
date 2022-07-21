@@ -53,11 +53,6 @@ static unsigned int CreateShader(const std::string& vertexShader, const std::str
 
 int main(void)
 {
-    // // Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
-    // glewExperimental = GL_TRUE;
-    // // Initialize GLEW to setup the OpenGL Function pointers
-    // glewInit();
-
     GLFWwindow* window;
 
     /* Initialize the library */
@@ -136,7 +131,7 @@ int main(void)
         "\n"
         "void main()\n"
         "{\n"
-        "   color = vec4(1.0, 0.0, 0.0, 1.0);\n"
+        "   color = vec4(0.0, 0.5, 1.0, 1.0);\n"
         "}\n";
 
     unsigned int shader = CreateShader(vertexShader, fragmentShader);
@@ -156,7 +151,6 @@ int main(void)
         // glEnd();
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
-        // glDrawElements(GL_TRIANGLES, 3, null);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
