@@ -12,7 +12,12 @@ find_package(OpenGL REQUIRED)
 # set(LIBRARIES ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES})
 set(INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
 
-file(GLOB GLFW_LIBRARIES "/opt/homebrew/Cellar/glfw/3.3.7/lib/*.dylib")
+# Check /opt/homebrew/Cellar/glfw/ for correct version
+set(GLFW_VERSION 3.3.8)
+set(GLFW_LIBRARIES_GLOB_PATH /opt/homebrew/Cellar/glfw/${GLFW_VERSION}/lib/*.dylib)
+
+# file(GLOB GLFW_LIBRARIES "/opt/homebrew/Cellar/glfw/3.3.8/lib/*.dylib")
+file(GLOB GLFW_LIBRARIES ${GLFW_LIBRARIES_GLOB_PATH})
 file(GLOB GLEW_LIBRARIES "/opt/homebrew/Cellar/glew/2.2.0_1/lib/*.dylib")
 set(LIBRARIES ${OPENGL_LIBRARIES} ${GLFW_LIBRARIES} ${GLEW_LIBRARIES})
 
@@ -24,8 +29,8 @@ set(TEST_CPP_DIR .)
 set(TEST_CPP_INCLUDE_DIR ${TEST_CPP_DIR}/dependencies/include)
 set(TEST_CPP_LIB_DIR ${TEST_CPP_DIR}/dependencies/library)
 
-set(GLFW_INCLUDE_DIR /opt/homebrew/Cellar/glfw/3.3.7/include)
-set(GLFW_LIB_DIR /opt/homebrew/Cellar/glfw/3.3.7/lib)
+set(GLFW_INCLUDE_DIR /opt/homebrew/Cellar/glfw/${GLFW_VERSION}/include)
+set(GLFW_LIB_DIR /opt/homebrew/Cellar/glfw/${GLFW_VERSION}/lib)
 
 set(GLEW_INCLUDE_DIR /opt/homebrew/Cellar/glew/2.2.0_1/include)
 set(GLEW_LIB_DIR /opt/homebrew/Cellar/glew/2.2.0_1/lib)

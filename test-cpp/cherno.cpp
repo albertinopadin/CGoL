@@ -12,6 +12,20 @@
     https://www.youtube.com/watch?v=0p9VxImr7Y0
 */
 
+static void GLClearError() 
+{
+    while(glGetError() != GL_NO_ERROR);
+    // while(!glGetError());
+}
+
+static void GLCheckError()
+{
+    while (GLenum error = glGetError())
+    {
+        std::cout << "[OpenGL Error] (" << error << ")" << std::endl;
+    }
+}
+
 struct ShaderProgramSource
 {
     std::string VertexSource;
@@ -181,6 +195,8 @@ int main(void)
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        // GLClearError();
+
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -192,10 +208,15 @@ int main(void)
         // glEnd();
 
         // glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+        GLClearError();
+        glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr);  // Intentional error to test error checking
+        GLCheckError();
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
+
+        // GLCheckError();
 
         /* Poll for and process events */
         glfwPollEvents();

@@ -14,7 +14,7 @@
 				// "${workspaceFolder}/test-cpp/dependencies/include/glad/glad.h",
 				"-L${workspaceFolder}/test-cpp/dependencies/library",
 				"${workspaceFolder}/test-cpp/dependencies/library/libglfw.3.3.dylib",
-				"/opt/homebrew/Cellar/glfw/3.3.7/lib/libglfw.3.3.dylib",
+				"/opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.3.3.dylib",
 				"/opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.0.dylib",
 				// "${workspaceFolder}/test-cpp/test.cpp",
 				"${workspaceFolder}/test-cpp/cherno.cpp",
