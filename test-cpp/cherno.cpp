@@ -12,18 +12,26 @@
     https://www.youtube.com/watch?v=0p9VxImr7Y0
 */
 
+#define ASSERT(x) if (!(x)) __builtin_debugtrap();
+#define GLCall(x) GLClearError();\
+    x;\
+    ASSERT(GLLogCall(#x, __FILE__, __LINE__))
+
 static void GLClearError() 
 {
     while(glGetError() != GL_NO_ERROR);
     // while(!glGetError());
 }
 
-static void GLCheckError()
+static bool GLLogCall(const char* function, const char* file, int line)
 {
     while (GLenum error = glGetError())
     {
-        std::cout << "[OpenGL Error] (" << error << ")" << std::endl;
+        std::cout << "[OpenGL Error] (" << error << "): " << function << " " << file << ":" << line << std::endl;
+        return false;
     }
+
+    return true;
 }
 
 struct ShaderProgramSource
@@ -209,9 +217,8 @@ int main(void)
 
         // glDrawArrays(GL_TRIANGLES, 0, 3);
         // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-        GLClearError();
-        glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr);  // Intentional error to test error checking
-        GLCheckError();
+        
+        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr));  // Intentional error to test error checking
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
