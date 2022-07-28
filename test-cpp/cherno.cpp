@@ -169,23 +169,16 @@ int main(void)
         2, 3, 0
     };
 
-    // unsigned int buffer;
-    // glGenBuffers(1, &buffer);
-    // glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    // glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
-
     unsigned int VBO, VAO;
     GLCall(glGenBuffers(1, &VBO));
     GLCall(glGenVertexArrays(1, &VAO));
     GLCall(glBindVertexArray(VAO));
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-    GLCall(glBufferData(GL_ARRAY_BUFFER, 6 * 2 * sizeof(float), positions, GL_STATIC_DRAW));
-
-    GLCall(glEnableVertexAttribArray(0));
+    GLCall(glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), positions, GL_STATIC_DRAW));
     
     // Specifying layout of buffer
-    GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
     GLCall(glEnableVertexAttribArray(0));
+    GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
 
     // Setting up index buffer
     unsigned int ibo;
@@ -211,24 +204,12 @@ int main(void)
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        // GLClearError();
-
         /* Render here */
         GLCall(glClear(GL_COLOR_BUFFER_BIT));
 
-        // Cherno code - Immediate mode
-        // glBegin(GL_TRIANGLES);
-        // glVertex2f(-0.5f, -0.5f);
-        // glVertex2f( 0.0f,  0.5f);
-        // glVertex2f( 0.5f, -0.5f);
-        // glEnd();
-
         GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));  // Uniform is set per draw call
 
-        // glDrawArrays(GL_TRIANGLES, 0, 3);
         GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
-        
-        // GLCall(glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr));  // Intentional error to test error checking
 
         if (r > 1.0f)
             increment = -0.05f;
@@ -239,8 +220,6 @@ int main(void)
 
         /* Swap front and back buffers */
         GLCall(glfwSwapBuffers(window));
-
-        // GLCheckError();
 
         /* Poll for and process events */
         GLCall(glfwPollEvents());
