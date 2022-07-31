@@ -3,22 +3,22 @@
 	"tasks": [
 		{
 			"type": "cppbuild",
-			"label": "C/C++: clang++ build active file",
-			"command": "/usr/bin/clang++",
+			"label": "C/C++: g++ build active file",
+			"command": "/opt/homebrew/bin/g++-11",
 			"args": [
 				"-std=c++17",
 				"-stdlib=libc++",
 				"-fdiagnostics-color=always",
 				"-Wall",
 				"-g",
-                "/opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.3.3.dylib",
+				"/opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.3.3.dylib",
 				"/opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.0.dylib",
 				"-I${workspaceFolder}/test-cpp/dependencies/include",
 				"${workspaceFolder}/test-cpp/VertexBuffer.cpp",
 				"${workspaceFolder}/test-cpp/IndexBuffer.cpp",
 				"${workspaceFolder}/test-cpp/Renderer.cpp",
 				"${workspaceFolder}/test-cpp/cherno.cpp",
-                // "${workspaceFolder}/test-cpp/*.cpp",  // Really confusing why this doesn't work
+				// "${workspaceFolder}/test-cpp/*.cpp",  // Really confusing why this doesn't work
 				"-o",
 				"${workspaceFolder}/test-cpp/app",
 				"-framework",
@@ -31,11 +31,11 @@
 				"CoreVideo",
 				"-framework",
 				"CoreFoundation",
-				"-Wno-deprecated",
-				// "-Wc++11-extensions"
+				"-Wno-deprecated"
 			],
 			"options": {
-				"cwd": "${fileDirname}"
+				// "cwd": "${fileDirname}"
+				"cwd": "${workspaceFolder}"
 			},
 			"problemMatcher": [
 				"$gcc"
@@ -44,7 +44,7 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"detail": "compiler: /usr/bin/clang++"
+			"detail": "compiler: /opt/homebrew/bin/g++-11"
 		}
 	]
 }
