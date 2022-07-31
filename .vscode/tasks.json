@@ -3,20 +3,70 @@
 	"tasks": [
 		{
 			"type": "cppbuild",
+			// "type": "shell",
 			"label": "C/C++: clang++ build active file",
-			"command": "/usr/bin/clang++",
+			// "command": "/usr/bin/clang++",
+			"command": "/opt/homebrew/bin/g++-11",
 			"args": [
 				"-std=c++17",
 				"-fdiagnostics-color=always",
 				"-Wall",
 				"-g",
-				"-I${workspaceFolder}/test-cpp/dependencies/include",
+				// "${workspaceFolder}/test-cpp/VertexBuffer.h",
+				// "${workspaceFolder}/test-cpp/IndexBuffer.h",
+				// "${workspaceFolder}/test-cpp/Renderer.h",
+				// "${workspaceFolder}/test-cpp/cherno.cpp",
+				// "${workspaceFolder}/test-cpp/*.h",
+				// "${workspaceFolder}/test-cpp/*.cpp",
 				// "${workspaceFolder}/test-cpp/dependencies/include/glad/glad.h",
 				"-L${workspaceFolder}/test-cpp/dependencies/library",
 				"${workspaceFolder}/test-cpp/dependencies/library/libglfw.3.3.dylib",
 				"/opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.3.3.dylib",
 				"/opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.0.dylib",
+				"-I${workspaceFolder}/test-cpp/dependencies/include",
+				"-I${workspaceFolder}/test-cpp",
+				"-I${workspaceFolder}/test-cpp/resources/shaders",
+				// {
+				// 	"value": "$(find ${workspaceFolder}/test-cpp -name \"*.h\")",
+				// 	"quoting": "escape"
+				// },
+				// {
+				// 	"value": "$(find ${workspaceFolder}/test-cpp -name \"*.cpp\")",
+				// 	"quoting": "escape"
+				// },
+				// "$(find ",
+				// {
+				// 	"value": "${workspaceFolder}/test-cpp",
+				// 	"quoting": "escape"
+				// },
+				// " -name \"*.h\")",
+				// "$(find ",
+				// {
+				// 	"value": "${workspaceFolder}/test-cpp",
+				// 	"quoting": "escape"
+				// },
+				// " -name \"*.cpp\")",
+				// "find ${workspaceFolder}/test-cpp -name \"*.h\"",
+				// "find ${workspaceFolder}/test-cpp -name \"*.cpp\"",
+				// "\"$(find \"${workspaceFolder}/test-cpp\" -name \"*.h\")\"",
+				// "\"$(find \"${workspaceFolder}/test-cpp\" -name \"*.cpp\")\"",
+				// "$(find ./test-cpp -name \"*.h\")",
+				// "$(find ./test-cpp -name \"*.cpp\")",
+				// "${workspaceFolder}/test-cpp/*.h",
+				// "${workspaceFolder}/test-cpp/*.cpp",
 				// "${workspaceFolder}/test-cpp/test.cpp",
+				// "-I${workspaceFolder}/test-cpp/VertexBuffer.h",
+				// "-I${workspaceFolder}/test-cpp/VertexBuffer.cpp",
+				// "-I${workspaceFolder}/test-cpp/IndexBuffer.h",
+				// "-I${workspaceFolder}/test-cpp/IndexBuffer.cpp",
+				// "-I${workspaceFolder}/test-cpp/Renderer.h",
+				// "-I${workspaceFolder}/test-cpp/Renderer.cpp",
+				// "-I${workspaceFolder}/test-cpp/*.h",
+				// "-I${workspaceFolder}/test-cpp/*.cpp",
+				// "-c",
+				"${workspaceFolder}/test-cpp/VertexBuffer.cpp",
+				"${workspaceFolder}/test-cpp/IndexBuffer.cpp",
+				"${workspaceFolder}/test-cpp/Renderer.cpp",
 				"${workspaceFolder}/test-cpp/cherno.cpp",
 				// "${workspaceFolder}/test-cpp/glad.c",
 				"-o",
@@ -35,7 +85,8 @@
 				"CoreVideo",
 				"-framework",
 				"CoreFoundation",
-				"-Wno-deprecated"
+				"-Wno-deprecated",
+				// "-Wc++11-extensions"
 			],
 			"options": {
 				"cwd": "${fileDirname}"
