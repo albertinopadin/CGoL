@@ -126,7 +126,7 @@ int main(void)
     
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // Have to create VAO if running Core
     #ifdef __APPLE__
     std::cout << "Running in an Apple machine" << std::endl;
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -169,16 +169,20 @@ int main(void)
         2, 3, 0
     };
 
-    unsigned int VBO, VAO;
-    GLCall(glGenBuffers(1, &VBO));
+    unsigned int VAO;
     GLCall(glGenVertexArrays(1, &VAO));
     GLCall(glBindVertexArray(VAO));
-    GLCall(glBindBuffer(GL_ARRAY_BUFFER, VBO));
+
+    unsigned int buffer;  // VBO -> vertex buffer object (?)
+    GLCall(glGenBuffers(1, &buffer));
+    GLCall(glBindBuffer(GL_ARRAY_BUFFER, buffer));
     GLCall(glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), positions, GL_STATIC_DRAW));
     
     // Specifying layout of buffer
     GLCall(glEnableVertexAttribArray(0));
     GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
+    // The above call -> index 0 of the vertex array will be bound to
+    // the currently boundGL_ARRAY_BUFFER
 
     // Setting up index buffer
     unsigned int ibo;
@@ -200,6 +204,7 @@ int main(void)
     GLCall(glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f));
 
     // Temporarily unbind everything:
+    GLCall(glBindVertexArray(0));
     GLCall(glUseProgram(0));
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
     GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
@@ -217,12 +222,7 @@ int main(void)
 
         GLCall(glUniform4f(location, r, 0.3f, 0.8f, 1.0f));  // Uniform is set per draw call
 
-        // Rebind:
-        GLCall(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-
-        // Specifying layout of buffer
-        GLCall(glEnableVertexAttribArray(0));
-        GLCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, 0));
+        GLCall(glBindVertexArray(VAO));
 
         // Rebind:
         GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
@@ -244,7 +244,7 @@ int main(void)
     }
 
     GLCall(glDeleteVertexArrays(1, &VAO));
-    GLCall(glDeleteBuffers(1, &VBO));
+    GLCall(glDeleteBuffers(1, &buffer));
     GLCall(glDeleteProgram(shader));
 
     GLCall(glfwTerminate());
