@@ -155,10 +155,6 @@ int main(void)
         2, 3, 0
     };
 
-    unsigned int VAO;
-    GLCall(glGenVertexArrays(1, &VAO));
-    GLCall(glBindVertexArray(VAO));
-
     VertexArray va;
     VertexBuffer vb(positions, 4 * 2 * sizeof(float));
 
@@ -184,7 +180,7 @@ int main(void)
     GLCall(glUniform4f(location, 0.2f, 0.3f, 0.8f, 1.0f));
 
     // Temporarily unbind everything:
-    GLCall(glBindVertexArray(0));
+    va.Unbind();
     GLCall(glUseProgram(0));
     GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
     GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
@@ -223,9 +219,7 @@ int main(void)
         GLCall(glfwPollEvents());
     }
 
-    GLCall(glDeleteVertexArrays(1, &VAO));
     GLCall(glDeleteProgram(shader));
-
     GLCall(glfwTerminate());
     return 0;
 }
