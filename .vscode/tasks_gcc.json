@@ -17,6 +17,7 @@
 				"${workspaceFolder}/test-cpp/VertexArray.cpp",
 				"${workspaceFolder}/test-cpp/VertexBuffer.cpp",
 				"${workspaceFolder}/test-cpp/IndexBuffer.cpp",
+				"${workspaceFolder}/test-cpp/Shader.cpp",
 				"${workspaceFolder}/test-cpp/Renderer.cpp",
 				"${workspaceFolder}/test-cpp/cherno.cpp",
 				// "${workspaceFolder}/test-cpp/*.cpp",  // Really confusing why this doesn't work
