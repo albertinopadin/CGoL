@@ -14,6 +14,7 @@
                 "/opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.3.3.dylib",
 				"/opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.0.dylib",
 				"-I${workspaceFolder}/test-cpp/dependencies/include",
+				"-I${workspaceFolder}/test-cpp/src/vendor",
 				"${workspaceFolder}/test-cpp/src/vendor/stb_image/stb_image.cpp",
 				"${workspaceFolder}/test-cpp/src/VertexArray.cpp",
 				"${workspaceFolder}/test-cpp/src/VertexBuffer.cpp",
