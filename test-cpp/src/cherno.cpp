@@ -5,9 +5,11 @@
 
 #include "Renderer.h"
 #include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 #include "IndexBuffer.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
 
 /*  
     From The Cherno's series on OpenGL
@@ -57,10 +59,10 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     float positions[] = {
-        -0.5f, -0.5f,
-         0.5f, -0.5f,
-         0.5f,  0.5f,
-        -0.5f,  0.5f,
+        -0.5f, -0.5f, 0.0f, 0.0f,
+         0.5f, -0.5f, 1.0f, 0.0f,
+         0.5f,  0.5f, 1.0f, 1.0f,
+        -0.5f,  0.5f, 0.0f, 1.0f
     };
 
     unsigned int indices[] = {
@@ -68,19 +70,27 @@ int main(void)
         2, 3, 0
     };
 
+    GLCall(glEnable(GL_BLEND));
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Setting blending function
+
     VertexArray va;
-    VertexBuffer vb(positions, 4 * 2 * sizeof(float));
+    VertexBuffer vb(positions, 4 * 4 * sizeof(float));  // 2 floats of positions, 2 of texture coords
 
     VertexBufferLayout layout;
     layout.Push<float>(2);
+    layout.Push<float>(2);  // Texture coords
     va.AddBuffer(vb, layout);
 
     // Setting up index buffer
     IndexBuffer ib(indices, 6);
 
-    Shader shader("resources/shaders/Basic.shader");
+    Shader shader("../resources/shaders/Basic.shader");
     shader.Bind();
     shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
+
+    Texture texture("../resources/textures/ChernoLogoAlpha.png");
+    texture.Bind();
+    shader.SetUniform1i("u_Texture", 0);  // Setting texture slot
 
     // Temporarily unbind everything:
     va.Unbind();
@@ -88,22 +98,21 @@ int main(void)
     ib.Unbind();
     shader.Unbind();
 
+    Renderer renderer;
+
     float r = 0.0f;
     float increment = 0.05f;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
-        GLCall(glClear(GL_COLOR_BUFFER_BIT));
+        renderer.Clear();
 
         // Rebind:
         shader.Bind();
         shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);  // Uniform is set per draw call
 
-        va.Bind();
-        ib.Bind();
-
-        GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+        renderer.Draw(va, ib, shader);
 
         if (r > 1.0f)
             increment = -0.05f;

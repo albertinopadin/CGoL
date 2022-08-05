@@ -40,7 +40,7 @@ set(GLEW_LIB_DIR /opt/homebrew/Cellar/glew/2.2.0_1/lib)
 # set(GLM_LIB_DIR /opt/homebrew/Cellar/glm/0.9.9.8/lib)
 
 # set(HEADER_FILES ${TEST_CPP_INCLUDE_DIR}/glad/glad.h ${TEST_CPP_INCLUDE_DIR}/GLFW/glfw3.h)
-file(GLOB PROJECT_HEADER_FILES "*.h")
+file(GLOB PROJECT_HEADER_FILES "src/*.h")
 set(HEADER_FILES ${PROJECT_HEADER_FILES} ${TEST_CPP_INCLUDE_DIR}/GLFW/glfw3.h)
 
 # add_library("test-cpp-lib" ${HEADER_FILES})
@@ -59,8 +59,9 @@ set(HEADER_FILES ${PROJECT_HEADER_FILES} ${TEST_CPP_INCLUDE_DIR}/GLFW/glfw3.h)
 # message("GLM_LIBRARIES = ${GLM_LIBRARIES}")
 
 # set(SOURCES glad.c cherno.cpp ${HEADER_FILES} ${TEST_CPP_LIB_DIR}/libglfw.3.3.dylib ${GLEW_LIB_DIR}/libGLEW.2.2.0.dylib)
-file(GLOB PROJECT_SOURCES "*.cpp")
-set(SOURCES ${PROJECT_SOURCES} ${HEADER_FILES})
+file(GLOB PROJECT_SOURCES "src/*.cpp")
+file(GLOB VENDOR_SOURCES "src/vendor/stb_image/*.cpp")
+set(SOURCES ${PROJECT_SOURCES} ${VENDOR_SOURCES} ${HEADER_FILES})
 
 # add_executable(${PROJECT_NAME} glad.c test.cpp)
 # add_executable(${PROJECT_NAME} glad.c test1.cpp ${HEADER_FILES})
