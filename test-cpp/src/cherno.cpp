@@ -22,19 +22,22 @@ int main(void)
     GLFWwindow* window;
 
     /* Initialize the library */
-    if (!glfwInit())
+    if (!glfwInit()) {
         return -1;
+    }
     
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // Have to create VAO if running Core
+    
     #ifdef __APPLE__
     std::cout << "Running in an Apple machine" << std::endl;
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     #endif
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World Blue", NULL, NULL);
+    // window = glfwCreateWindow(640, 480, "Hello World Blue", NULL, NULL);
+    window = glfwCreateWindow(960, 540, "Cherno Test", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -59,10 +62,10 @@ int main(void)
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     float positions[] = {
-        -0.5f, -0.5f, 0.0f, 0.0f,
-         0.5f, -0.5f, 1.0f, 0.0f,
-         0.5f,  0.5f, 1.0f, 1.0f,
-        -0.5f,  0.5f, 0.0f, 1.0f
+        100.0f, 100.0f, 0.0f, 0.0f,
+        200.0f, 100.0f, 1.0f, 0.0f,
+        200.0f, 200.0f, 1.0f, 1.0f,
+        100.0f, 200.0f, 0.0f, 1.0f
     };
 
     unsigned int indices[] = {
@@ -85,7 +88,9 @@ int main(void)
     IndexBuffer ib(indices, 6);
 
     // Orthographic projection
-    glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+    glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+    // glm::vec4 vp(100.0f, 100.0f, 0.0f, 1.0f);
+    // glm::vec4 result = proj * vp;  // Tried setting breakpoint here in vscode...
 
     Shader shader("../resources/shaders/Basic.shader");
     shader.Bind();
