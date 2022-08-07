@@ -92,9 +92,9 @@ int main(void)
     // Orthographic projection
     glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0, 0));
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
+    // glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
 
-    glm::mat4 mvp = proj * view * model;
+    // glm::mat4 mvp = proj * view * model;
 
     // glm::vec4 vp(100.0f, 100.0f, 0.0f, 1.0f);
     // glm::vec4 result = proj * vp;  // Tried setting breakpoint here in vscode...
@@ -103,7 +103,7 @@ int main(void)
     shader.Bind();
     shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
     // shader.SetUniformMat4f("u_MVP", proj);
-    shader.SetUniformMat4f("u_MVP", mvp);
+    // shader.SetUniformMat4f("u_MVP", mvp);
 
     Texture texture("../resources/textures/ChernoLogoAlpha.png");
     texture.Bind();
@@ -121,9 +121,7 @@ int main(void)
     ImGui_ImplGlfwGL3_Init(window, true);
     ImGui::StyleColorsDark();
 
-    bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    glm::vec3 translation(200, 200, 0);
 
     float r = 0.0f;
     float increment = 0.05f;
@@ -135,10 +133,14 @@ int main(void)
 
         ImGui_ImplGlfwGL3_NewFrame();
 
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+        glm::mat4 mvp = proj * view * model;
+
         // Rebind:
         shader.Bind();
         shader.SetUniform4f("u_Color", r, 0.3f, 0.8f, 1.0f);  // Uniform is set per draw call
-
+        shader.SetUniformMat4f("u_MVP", mvp);
+        
         renderer.Draw(va, ib, shader);
 
         if (r > 1.0f)
@@ -149,21 +151,7 @@ int main(void)
         r += increment;
 
         {
-            static float f = 0.0f;
-            static int counter = 0;
-            ImGui::Text("Hello, World!");
-            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-            ImGui::ColorEdit3("clear color", (float*)&clear_color);
-            
-            ImGui::Checkbox("Demo Window", &show_demo_window);
-            ImGui::Checkbox("Another Window", &show_another_window);
-
-            if (ImGui::Button("Button")) {
-                counter++;
-            }
-            ImGui::SameLine();
-            ImGui::Text("counter = %d", counter);
-
+            ImGui::SliderFloat3("Translation", &translation.x, 0.0f, 960.0f);
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         }
 
