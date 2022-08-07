@@ -60,7 +60,7 @@ set(HEADER_FILES ${PROJECT_HEADER_FILES} ${TEST_CPP_INCLUDE_DIR}/GLFW/glfw3.h)
 
 # set(SOURCES glad.c cherno.cpp ${HEADER_FILES} ${TEST_CPP_LIB_DIR}/libglfw.3.3.dylib ${GLEW_LIB_DIR}/libGLEW.2.2.0.dylib)
 file(GLOB PROJECT_SOURCES "src/*.cpp")
-file(GLOB VENDOR_SOURCES "src/vendor/stb_image/*.cpp" "src/vendor/glm/*.cpp")
+file(GLOB VENDOR_SOURCES "src/vendor/stb_image/*.cpp" "src/vendor/glm/*.cpp" "src/vendor/imgui/*.cpp")
 set(SOURCES ${PROJECT_SOURCES} ${VENDOR_SOURCES} ${HEADER_FILES})
 
 set(VENDOR_INCLUDE_DIR ${TEST_CPP_DIR}/src/vendor)

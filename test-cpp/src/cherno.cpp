@@ -10,6 +10,8 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw_gl3.h"
 
 /*  
     From The Cherno's series on OpenGL
@@ -73,7 +75,7 @@ int main(void)
         2, 3, 0
     };
 
-    GLCall(glEnable(GL_BLEND));
+    GLCall(glEnable(GL_BLEND));                                 // Enable blending
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Setting blending function
 
     VertexArray va;
@@ -89,13 +91,19 @@ int main(void)
 
     // Orthographic projection
     glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100, 0, 0));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(200, 200, 0));
+
+    glm::mat4 mvp = proj * view * model;
+
     // glm::vec4 vp(100.0f, 100.0f, 0.0f, 1.0f);
     // glm::vec4 result = proj * vp;  // Tried setting breakpoint here in vscode...
 
     Shader shader("../resources/shaders/Basic.shader");
     shader.Bind();
     shader.SetUniform4f("u_Color", 0.8f, 0.3f, 0.8f, 1.0f);
-    shader.SetUniformMat4f("u_MVP", proj);
+    // shader.SetUniformMat4f("u_MVP", proj);
+    shader.SetUniformMat4f("u_MVP", mvp);
 
     Texture texture("../resources/textures/ChernoLogoAlpha.png");
     texture.Bind();
@@ -109,6 +117,14 @@ int main(void)
 
     Renderer renderer;
 
+    ImGui::CreateContext();
+    ImGui_ImplGlfwGL3_Init(window, true);
+    ImGui::StyleColorsDark();
+
+    bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
     float r = 0.0f;
     float increment = 0.05f;
     /* Loop until the user closes the window */
@@ -116,6 +132,8 @@ int main(void)
     {
         /* Render here */
         renderer.Clear();
+
+        ImGui_ImplGlfwGL3_NewFrame();
 
         // Rebind:
         shader.Bind();
@@ -130,6 +148,28 @@ int main(void)
 
         r += increment;
 
+        {
+            static float f = 0.0f;
+            static int counter = 0;
+            ImGui::Text("Hello, World!");
+            ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
+            ImGui::ColorEdit3("clear color", (float*)&clear_color);
+            
+            ImGui::Checkbox("Demo Window", &show_demo_window);
+            ImGui::Checkbox("Another Window", &show_another_window);
+
+            if (ImGui::Button("Button")) {
+                counter++;
+            }
+            ImGui::SameLine();
+            ImGui::Text("counter = %d", counter);
+
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        }
+
+        ImGui::Render();
+        ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
+
         /* Swap front and back buffers */
         GLCall(glfwSwapBuffers(window));
 
@@ -137,6 +177,8 @@ int main(void)
         GLCall(glfwPollEvents());
     }
 
+    ImGui_ImplGlfwGL3_Shutdown();
+    ImGui::DestroyContext();
     GLCall(glfwTerminate());
     return 0;
 }
