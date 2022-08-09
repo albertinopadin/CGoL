@@ -14,6 +14,7 @@
 #include "imgui/imgui_impl_glfw_gl3.h"
 #include "tests/TestClearColor.h"
 
+
 /*  
     From The Cherno's series on OpenGL
     https://www.youtube.com/watch?v=0p9VxImr7Y0
@@ -73,20 +74,32 @@ int main(void)
     ImGui_ImplGlfwGL3_Init(window, true);
     ImGui::StyleColorsDark();
 
-    test::TestClearColor test;
+    test::Test* currentTest = nullptr;
+    test::TestMenu* testMenu = new test::TestMenu(currentTest);
+    currentTest = testMenu;
+
+    testMenu->RegisterTest<test::TestClearColor>("Clear Color");
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
+        GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
         /* Render here */
         renderer.Clear();
 
-        test.OnUpdate(0.0f);
-        test.OnRender();
-
         ImGui_ImplGlfwGL3_NewFrame();
 
-        test.OnImGuiRender();
+        if (currentTest) {
+            currentTest->OnUpdate(0.0f);
+            currentTest->OnRender();
+            ImGui::Begin("Test");
+            if (currentTest != testMenu && ImGui::Button("<-")) {
+                delete currentTest;
+                currentTest = testMenu;
+            }
+            currentTest->OnImGuiRender();
+            ImGui::End();
+        }
         
         ImGui::Render();
         ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
@@ -98,6 +111,11 @@ int main(void)
         GLCall(glfwPollEvents());
     }
 
+    delete currentTest;
+    if (currentTest != testMenu) {
+        delete testMenu;
+    }
+    
     ImGui_ImplGlfwGL3_Shutdown();
     ImGui::DestroyContext();
     GLCall(glfwTerminate());
