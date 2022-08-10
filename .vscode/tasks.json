@@ -22,6 +22,7 @@
 				"${workspaceFolder}/test-cpp/src/vendor/imgui/imgui_draw.cpp",
 				"${workspaceFolder}/test-cpp/src/vendor/imgui/imgui_demo.cpp",
 				"${workspaceFolder}/test-cpp/src/vendor/stb_image/stb_image.cpp",
+				"${workspaceFolder}/test-cpp/src/tests/TestTexture2D.cpp",
 				"${workspaceFolder}/test-cpp/src/tests/TestClearColor.cpp",
 				"${workspaceFolder}/test-cpp/src/tests/Test.cpp",
 				"${workspaceFolder}/test-cpp/src/VertexArray.cpp",
