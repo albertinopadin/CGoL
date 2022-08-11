@@ -7,6 +7,8 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw_gl3.h"
 
+#include "Grid.h"
+
 
 void setWindowHints()
 {
@@ -70,14 +72,18 @@ int main()
 
     printOpenGLVersion();
 
-    GLCall(glEnable(GL_BLEND));                                 // Enable blending
-    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));  // Setting blending function
+    GLCall(glEnable(GL_BLEND));                                             // Enable blending
+    GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));   // Setting blending function
 
     Renderer renderer;
 
     ImGui::CreateContext();
     ImGui_ImplGlfwGL3_Init(window, true);
     ImGui::StyleColorsDark();
+
+    uint64_t generation = 0;
+    int gridSize = 100;
+    Grid grid(gridSize, gridSize);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -89,6 +95,7 @@ int main()
         ImGui_ImplGlfwGL3_NewFrame();
 
         // Render Grid of cells:
+        generation = grid.Update();
         
         ImGui::Render();
         ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
