@@ -1,2 +1,2 @@
 # CGoL
-Conway's Game of Life implemented in C
+Conway's Game of Life implemented in C++

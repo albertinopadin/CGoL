@@ -1,0 +1,18 @@
+# ninja log v5
+2	2392	1660205369392336516	CMakeFiles/CGoL.dir/src/vendor/imgui/imgui_demo.cpp.o	1bc381249417f82b
+3	2420	1660205369420733026	CMakeFiles/CGoL.dir/src/vendor/stb_image/stb_image.cpp.o	20ed996e7d343b8f
+1	2484	1660205369484178638	CMakeFiles/CGoL.dir/src/Cell.cpp.o	9caa7f48ac5d0b6f
+2	2480	1660205369480282442	CMakeFiles/CGoL.dir/src/vendor/imgui/imgui_draw.cpp.o	71dcc109055db368
+2	2326	1660205369326429676	CMakeFiles/CGoL.dir/src/vendor/imgui/imgui_impl_glfw_gl3.cpp.o	aa788f780f994ea7
+2	2730	1660205369730477989	CMakeFiles/CGoL.dir/src/vendor/imgui/imgui.cpp.o	a0d14133417cfee
+1	2484	1660205369484712351	CMakeFiles/CGoL.dir/src/Grid.cpp.o	7a4bfc9b3260f07b
+2	2843	1660205369843166688	CMakeFiles/CGoL.dir/src/main.cpp.o	109da5f61b95d90a
+3	438	1660205484283073641	CMakeFiles/CGoL.dir/src/graphics/IndexBuffer.cpp.o	960bd4836d79c982
+4	439	1660205484283097891	CMakeFiles/CGoL.dir/src/graphics/VertexBuffer.cpp.o	aba6ca9b2732323
+4	446	1660205484293162635	CMakeFiles/CGoL.dir/src/graphics/Texture.cpp.o	80c02b153e560452
+4	480	1660205484327053396	CMakeFiles/CGoL.dir/src/graphics/VertexArray.cpp.o	e6cc022c265e62c4
+4	513	1660205484359745772	CMakeFiles/CGoL.dir/src/graphics/Renderer.cpp.o	8e739691e98bf1dd
+4	656	1660205484502515285	CMakeFiles/CGoL.dir/src/graphics/Shader.cpp.o	50bd0b42f04bb48f
+656	708	1660205484556750202	CGoL	133434bf08b717f2
+2	583	1660205528967093718	CMakeFiles/CGoL.dir/src/main.cpp.o	109da5f61b95d90a
+583	635	1660205529021827971	CGoL	133434bf08b717f2

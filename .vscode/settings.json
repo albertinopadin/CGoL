@@ -1,5 +1,5 @@
 {
-    "cmake.sourceDirectory": "${workspaceFolder}/test-cpp",
+    "cmake.sourceDirectory": "${workspaceFolder}/.",
     "files.associations": {
         "__bit_reference": "cpp",
         "__bits": "cpp",
