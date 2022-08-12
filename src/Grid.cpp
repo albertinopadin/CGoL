@@ -1,12 +1,15 @@
 #include "Grid.h"
 
 Grid::Grid(int xCells, int yCells)
-    : m_XCells(xCells), m_YCells(yCells), m_Generation(0), m_Cells(std::vector<Cell>())
+    : m_XCells(xCells), m_YCells(yCells), m_Generation(0), m_Cells(std::vector<std::unique_ptr<Cell>>())
 {
     for (int x = 0; x < m_XCells; x++) {
         for (int y = 0; y < m_YCells; y++) {
             // TODO: Figure out position and color:
-            m_Cells.push_back(Cell({0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f,1.0f}))
+            CellPosition cellPosition = {0.0f, 0.0f, 0.0f};
+            CellSize cellSize = {0.9, 0.9};
+            CellColor cellColor = {0.0f, 1.0f, 0.0f, 1.0f};
+            m_Cells.emplace_back(std::make_unique<Cell>(cellPosition, cellSize, cellColor));
         }
     }
 }
@@ -19,19 +22,19 @@ Grid::~Grid()
 
 void Grid::OnRender()
 {
-    for (Cell &cell: m_Cells) {
-        cell.OnRender();
+    for (std::unique_ptr<Cell> &cell: m_Cells) {
+        cell->OnRender();
     }
 }
 
-uint64_t Grid::Update()
+unsigned int Grid::Update()
 {
-    for (Cell &cell: m_Cells) {
-        cell.PrepareUpdate();
+    for (std::unique_ptr<Cell> &cell: m_Cells) {
+        cell->PrepareUpdate();
     }
 
-    for (Cell &cell: m_Cells) {
-        cell.Update();
+    for (std::unique_ptr<Cell> &cell: m_Cells) {
+        cell->Update();
     }
 
     ++m_Generation;
@@ -40,8 +43,8 @@ uint64_t Grid::Update()
 
 void Grid::Reset()
 {
-    for (Cell &cell: m_Cells) {
-        cell.MakeDead();
+    for (std::unique_ptr<Cell> &cell: m_Cells) {
+        cell->MakeDead();
     }
 
     m_Generation = 0;
@@ -57,19 +60,18 @@ void Grid::setNeighborsForCellsInGrid()
     for (int x = 0; x < m_XCells; x++) {
         for (int y = 0; y < m_YCells; y++) {
             int idx = x + (y * m_XCells);
-            m_Cells[idx].addNeighbors(getCellNeighbors(x, y));
+            m_Cells[idx]->addNeighbors(getCellNeighbors(x, y));
         }
     }
 }
 
-std::vector<Cell>& Grid::getCellNeighbors(int x, int y) const
-{
+std::vector<std::unique_ptr<Cell>> Grid::getCellNeighbors(int x, int y) const {
 
 }
 
 void Grid::makeAllLive()
 {
-    for (Cell &cell: m_Cells) {
-        cell.MakeLive();
+    for (std::unique_ptr<Cell> &cell: m_Cells) {
+        cell->MakeLive();
     }
 }

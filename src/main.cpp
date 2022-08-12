@@ -81,7 +81,7 @@ int main()
     ImGui_ImplGlfwGL3_Init(window, true);
     ImGui::StyleColorsDark();
 
-    uint64_t generation = 0;
+    unsigned int generation = 0;
     int gridSize = 100;
     Grid grid(gridSize, gridSize);
 
