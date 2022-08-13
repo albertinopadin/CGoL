@@ -39,21 +39,20 @@ private:
     std::vector<std::unique_ptr<Cell>> m_Neighbors;
     CellState m_CurrentState;
     CellState m_NextState;
-    float *m_Vertices;
-    unsigned int m_Indices[6];
-    std::unique_ptr<VertexBuffer> m_VertexBuffer;
-    std::unique_ptr<VertexArray> m_VertexArray;
-    std::unique_ptr<IndexBuffer> m_IndexBuffer;
-    std::unique_ptr<Shader> m_Shader;
 
 public:
     bool alive;
+    CellColor color;
     float alpha;
+    float *vertices;
+    static const unsigned int numVertices = 4;
+    static const unsigned int positionComponentsPerVertex = 3;
+    unsigned int indices[6];
+    static const unsigned int numIndices = 6;
 
-    Cell(CellPosition position, CellSize size, CellColor color);
+    Cell(CellPosition position, CellSize size, CellColor cellColor);
     ~Cell();
 
-    void OnRender();
     void addNeighbors(std::vector<std::unique_ptr<Cell>> neighbors);
     void PrepareUpdate();
     void Update();

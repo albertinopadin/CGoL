@@ -98,7 +98,7 @@ int main()
 
         // Update and then render:
 //        generation = grid.Update();
-        grid.OnRender();
+        grid.OnRender(renderer);
 
         ImGui::Render();
         ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());

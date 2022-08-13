@@ -3,49 +3,29 @@
 #include <utility>
 
 
-Cell::Cell(CellPosition position, CellSize size, CellColor color)
-    : alpha(CellAlpha::live), alive(false),
+Cell::Cell(CellPosition position, CellSize size, CellColor cellColor)
+    : alpha(CellAlpha::live), color(cellColor), alive(false),
     m_Neighbors(std::vector<std::unique_ptr<Cell>>()), m_CurrentState(CellState::Dead), m_NextState(CellState::Dead),
-    m_Vertices(initVertices(position, size)), m_Indices { 0, 1, 2, 1, 2, 3}
+    vertices(initVertices(position, size)), indices { 0, 1, 2, 1, 2, 3}
 {
-    m_VertexBuffer = std::make_unique<VertexBuffer>(m_Vertices, 4*2*sizeof(float));
 
-    VertexBufferLayout layout;
-    layout.Push<float>(2);
-
-    m_VertexArray = std::make_unique<VertexArray>();
-    m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
-
-    m_IndexBuffer = std::make_unique<IndexBuffer>(m_Indices, 6);
-
-    m_Shader = std::make_unique<Shader>("../resources/shaders/Basic.shader");
-    m_Shader->Bind();
-    m_Shader->SetUniform4f("u_Color", color.r, color.g, color.b, color.alpha);
 }
 
 float *Cell::initVertices(CellPosition position, CellSize size) {
     // Calculate cell vertices based on position and size
     float halfCellWidth = size.width / 2;
     float halfCellHeight = size.height / 2;
-    return new float[8] {
-            position.x - halfCellWidth, position.y - halfCellHeight,
-            position.x - halfCellWidth, position.y + halfCellHeight,
-            position.x + halfCellWidth, position.y - halfCellHeight,
-            position.x + halfCellWidth, position.y + halfCellHeight
+    return new float[numVertices * positionComponentsPerVertex] {
+            position.x - halfCellWidth, position.y - halfCellHeight, position.z,
+            position.x - halfCellWidth, position.y + halfCellHeight, position.z,
+            position.x + halfCellWidth, position.y - halfCellHeight, position.z,
+            position.x + halfCellWidth, position.y + halfCellHeight, position.z,
     };
 }
 
 Cell::~Cell()
 {
 
-}
-
-void Cell::OnRender()
-{
-    Renderer renderer;
-    m_Shader->Bind();
-    m_Shader->SetUniform1f("u_Alpha", alpha);
-    renderer.Draw(*m_VertexArray, *m_IndexBuffer, *m_Shader);
 }
 
 void Cell::addNeighbors(std::vector<std::unique_ptr<Cell>> neighbors)
