@@ -36,7 +36,6 @@ struct CellColor
 class Cell
 {
 private:
-    float m_Alpha;
     std::vector<std::unique_ptr<Cell>> m_Neighbors;
     CellState m_CurrentState;
     CellState m_NextState;
@@ -49,6 +48,7 @@ private:
 
 public:
     bool alive;
+    float alpha;
 
     Cell(CellPosition position, CellSize size, CellColor color);
     ~Cell();

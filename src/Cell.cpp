@@ -4,8 +4,8 @@
 
 
 Cell::Cell(CellPosition position, CellSize size, CellColor color)
-    : m_Alpha(CellAlpha::dead), alive(false),
-    m_Neighbors(nullptr), m_CurrentState(CellState::Dead), m_NextState(CellState::Dead),
+    : alpha(CellAlpha::live), alive(false),
+    m_Neighbors(std::vector<std::unique_ptr<Cell>>()), m_CurrentState(CellState::Dead), m_NextState(CellState::Dead),
     m_Vertices(initVertices(position, size)), m_Indices { 0, 1, 2, 1, 2, 3}
 {
     m_VertexBuffer = std::make_unique<VertexBuffer>(m_Vertices, 4*2*sizeof(float));
@@ -18,7 +18,7 @@ Cell::Cell(CellPosition position, CellSize size, CellColor color)
 
     m_IndexBuffer = std::make_unique<IndexBuffer>(m_Indices, 6);
 
-    m_Shader = std::make_unique<Shader>("filepath");
+    m_Shader = std::make_unique<Shader>("../resources/shaders/Basic.shader");
     m_Shader->Bind();
     m_Shader->SetUniform4f("u_Color", color.r, color.g, color.b, color.alpha);
 }
@@ -42,12 +42,9 @@ Cell::~Cell()
 
 void Cell::OnRender()
 {
-    GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
-    GLCall(glClear(GL_COLOR_BUFFER_BIT));
-
     Renderer renderer;
     m_Shader->Bind();
-    m_Shader->SetUniform1f("u_Alpha", m_Alpha);
+    m_Shader->SetUniform1f("u_Alpha", alpha);
     renderer.Draw(*m_VertexArray, *m_IndexBuffer, *m_Shader);
 }
 
@@ -59,8 +56,8 @@ void Cell::addNeighbors(std::vector<std::unique_ptr<Cell>> neighbors)
 void Cell::PrepareUpdate()
 {
     int liveNeighbors = 0;
-    for (const Cell& neighbor : *m_Neighbors) {
-        if (neighbor.alive) {
+    for (std::unique_ptr<Cell> &neighbor : m_Neighbors) {
+        if (neighbor->alive) {
             ++liveNeighbors;
         }
     }
@@ -90,12 +87,12 @@ void Cell::SetState(CellState state) {
 
 void Cell::MakeDead() {
     SetState(CellState::Dead);
-    m_Alpha = CellAlpha::dead;
+    alpha = CellAlpha::dead;
 }
 
 void Cell::MakeLive() {
     SetState(CellState::Alive);
-    m_Alpha = CellAlpha::live;
+    alpha = CellAlpha::live;
 }
 
 bool Cell::needsUpdate() {

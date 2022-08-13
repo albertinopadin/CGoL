@@ -82,8 +82,10 @@ int main()
     ImGui::StyleColorsDark();
 
     unsigned int generation = 0;
-    int gridSize = 100;
+    int gridSize = 2;
     Grid grid(gridSize, gridSize);
+//    grid.RandomState(0.25f);
+    grid.RandomState(1.00f);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -94,9 +96,10 @@ int main()
 
         ImGui_ImplGlfwGL3_NewFrame();
 
-        // Render Grid of cells:
-        generation = grid.Update();
-        
+        // Update and then render:
+//        generation = grid.Update();
+        grid.OnRender();
+
         ImGui::Render();
         ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
