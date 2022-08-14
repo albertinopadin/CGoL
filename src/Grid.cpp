@@ -12,7 +12,8 @@ Grid::Grid(int xCells, int yCells)
     m_VertexBuffer = createBatchVertexBuffer();
 
     VertexBufferLayout layout;
-    layout.Push<float>(3);
+    layout.Push<float>(Cell::positionComponentsPerVertex);
+
 //    for (int i = 0; i < m_Cells.size(); i++) {
 //        layout.Push<float>(3);
 //    }
@@ -93,15 +94,15 @@ std::unique_ptr<IndexBuffer> Grid::createBatchIndexBuffer()
     unsigned int batchIndices[batchIndicesCount];
     for (std::unique_ptr<Cell> &cell : m_Cells) {
         for (unsigned int index : cell->indices) {
-            batchIndices[i++] = index + (cellIdx * Cell::numIndices);
+            batchIndices[i++] = index + (cellIdx * (Cell::positionComponentsPerVertex + 1));
         }
         ++cellIdx;
     }
 
-//    std::cout << "Batch Indices: " << std::endl;
-//    for (int idx = 0; idx < batchIndicesCount; idx++) {
-//        std::cout << "Index " << idx << ": " << batchIndices[idx] << std::endl;
-//    }
+    std::cout << "Batch Indices: " << std::endl;
+    for (int idx = 0; idx < batchIndicesCount; idx++) {
+        std::cout << "Index " << idx << ": " << batchIndices[idx] << std::endl;
+    }
 
     return std::make_unique<IndexBuffer>((unsigned int *)batchIndices, batchIndicesCount);
 }
