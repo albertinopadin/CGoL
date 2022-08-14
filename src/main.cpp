@@ -53,7 +53,8 @@ int main()
     setWindowHints();
 
     /* Create a windowed mode window and its OpenGL context */
-    GLFWwindow* window = glfwCreateWindow(960, 540, "CGoL", NULL, NULL);
+    WindowSize windowSize { 1000, 800 };
+    GLFWwindow* window = glfwCreateWindow(windowSize.width, windowSize.height, "CGoL", NULL, NULL);
 
     if (!window)
     {
@@ -82,10 +83,9 @@ int main()
     ImGui::StyleColorsDark();
 
     unsigned int generation = 0;
-    int gridSize = 2;
-    Grid grid(gridSize, gridSize);
-//    grid.RandomState(0.25f);
-    grid.RandomState(1.00f);
+    int gridSize = 100;
+    Grid grid(gridSize, gridSize, windowSize);
+    grid.RandomState(0.25f);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -97,7 +97,7 @@ int main()
         ImGui_ImplGlfwGL3_NewFrame();
 
         // Update and then render:
-//        generation = grid.Update();
+        generation = grid.Update();
         grid.OnRender(renderer);
 
         ImGui::Render();

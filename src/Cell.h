@@ -41,19 +41,22 @@ private:
     CellState m_NextState;
 
 public:
+    static const unsigned int numVertices = 4;
+    static const unsigned int positionComponentsPerVertex = 3;
+    static const unsigned int colorComponentsPerVertex = 4;
+    static const unsigned int componentsPerVertex = positionComponentsPerVertex + colorComponentsPerVertex;
+    static const unsigned int numIndices = 6;
+
     bool alive;
     CellColor color;
     float alpha;
     float *vertices;
-    static const unsigned int numVertices = 4;
-    static const unsigned int positionComponentsPerVertex = 3;
     unsigned int indices[6];
-    static const unsigned int numIndices = 6;
 
     Cell(CellPosition position, CellSize size, CellColor cellColor);
     ~Cell();
 
-    void addNeighbors(std::vector<std::unique_ptr<Cell>> neighbors);
+    void AddNeighbors(std::vector<std::unique_ptr<Cell>> neighbors);
     void PrepareUpdate();
     void Update();
     void SetState(CellState state);
@@ -62,5 +65,6 @@ public:
     bool needsUpdate();
 
 private:
-    static float* initVertices(CellPosition position, CellSize size) ;
+    static float* InitVertices(CellPosition position, CellSize size, CellColor color);
+    void SetAlphaInVertices() const;
 };

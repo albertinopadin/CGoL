@@ -4,23 +4,30 @@
 #include <vector>
 #include <memory>
 
+struct WindowSize {
+    float width;
+    float height;
+};
+
 class Grid
 {
 private:
-    float m_CellWidth = 0.9f;
-    float m_CellHeight = 0.9f;
-    float m_CellSpacing = 0.1f;
+    WindowSize m_WindowSize;
+    float m_CellWidth = 9.0f;
+    float m_CellHeight = 9.0f;
+    float m_CellSpacing = 1.0f;
     int m_XCells, m_YCells;
     unsigned int m_Generation;
     std::vector<std::unique_ptr<Cell>> m_Cells;
     std::unique_ptr<VertexBuffer> m_VertexBuffer;
+    VertexBufferLayout m_Layout;
     std::unique_ptr<VertexArray> m_VertexArray;
     std::unique_ptr<IndexBuffer> m_IndexBuffer;
     std::unique_ptr<Shader> m_Shader;
-    // TODO: figure out how to attach alpha uniforms to shader per cell
+    glm::mat4 m_Proj, m_View;
 
 public:
-    Grid(int xCells, int yCells);
+    Grid(int xCells, int yCells, WindowSize windowSize);
     ~Grid();
 
     void OnRender(Renderer &renderer);

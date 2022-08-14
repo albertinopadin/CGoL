@@ -2,22 +2,27 @@
 #version 410 core
 
 layout(location = 0) in vec3 position;
+layout(location = 1) in vec4 vColor;
+
+uniform mat4 u_MVP;  // Model View Projection matrix
+
+out vec4 fColor;
 
 void main()
 {
-   gl_Position = vec4(position, 1.0f);
+   gl_Position = u_MVP * vec4(position, 1.0f);
+   fColor = vColor;
 }
 
 
 #shader fragment
 #version 410 core
 
-layout(location = 0) out vec4 color;
+in vec4 fColor;
 
-uniform vec4 u_Color;
-uniform float u_Alpha;
+layout(location = 0) out vec4 color;
 
 void main()
 {
-   color = vec4(u_Color.rgb, u_Alpha);
+   color = fColor;
 }

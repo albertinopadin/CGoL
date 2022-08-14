@@ -3,23 +3,21 @@
 #include <iostream>
 
 
-Grid::Grid(int xCells, int yCells)
-    : m_XCells(xCells), m_YCells(yCells), m_Generation(0), m_Cells(std::vector<std::unique_ptr<Cell>>())
+Grid::Grid(int xCells, int yCells, WindowSize windowSize)
+    : m_WindowSize(windowSize), m_XCells(xCells), m_YCells(yCells), m_Generation(0), m_Cells(std::vector<std::unique_ptr<Cell>>()),
+      m_Proj(glm::ortho(0.0f, windowSize.width, 0.0f, windowSize.height, -1.0f, 1.0f)),
+      m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)))
 {
     initGrid();
     setNeighborsForCellsInGrid();
 
-    m_VertexBuffer = createBatchVertexBuffer();
+    m_VertexBuffer = std::move(createBatchVertexBuffer());
 
-    VertexBufferLayout layout;
-    layout.Push<float>(Cell::positionComponentsPerVertex);
-
-//    for (int i = 0; i < m_Cells.size(); i++) {
-//        layout.Push<float>(3);
-//    }
+    m_Layout.Push<float>(Cell::positionComponentsPerVertex);
+    m_Layout.Push<float>(Cell::colorComponentsPerVertex);
 
     m_VertexArray = std::make_unique<VertexArray>();
-    m_VertexArray->AddBuffer(*m_VertexBuffer, layout);
+    m_VertexArray->AddBuffer(*m_VertexBuffer, m_Layout);
 
     m_IndexBuffer = createBatchIndexBuffer();
 
@@ -36,7 +34,7 @@ Grid::Grid(int xCells, int yCells)
 Grid::~Grid()
 {
     // Is this correct ???
-    delete &m_Cells;
+//    delete &m_Cells;
 }
 
 void Grid::initGrid()
@@ -54,34 +52,32 @@ void Grid::initGrid()
 std::unique_ptr<VertexBuffer> Grid::createBatchVertexBuffer()
 {
     int i = 0;
-    unsigned int batchVerticesComponentsCount = m_Cells.size() * Cell::numVertices * Cell::positionComponentsPerVertex;
+    unsigned int batchVerticesComponentsCount = m_Cells.size() * Cell::numVertices * Cell::componentsPerVertex;
     float batchVerticesComponents[batchVerticesComponentsCount];
     for (std::unique_ptr<Cell> &cell : m_Cells) {
-        for (int vi = 0; vi < Cell::numVertices * Cell::positionComponentsPerVertex; vi++) {
+        for (int vi = 0; vi < Cell::numVertices * Cell::componentsPerVertex; vi++) {
             batchVerticesComponents[i++] = cell->vertices[vi];
         }
     }
 
-    std::cout << "Batch Vertices: " << std::endl;
-//    for (int idx = 0; idx < batchVerticesComponentsCount; idx++) {
-//        std::cout << "Index " << idx << ": " << batchVerticesComponents[idx] << std::endl;
+//    std::cout << "Batch Vertices: " << std::endl;
+////    for (int idx = 0; idx < batchVerticesComponentsCount; idx++) {
+////        std::cout << "Index " << idx << ": " << batchVerticesComponents[idx] << std::endl;
+////    }
+//
+//    std::cout << "Per Cell/Vertex:" << std::endl;
+//    for (unsigned int c = 0; c < m_Cells.size(); c++) {
+//        std::cout << "Vertices for cell: " << c << std::endl;
+//        for (unsigned int v = 0; v < Cell::numVertices; v++) {
+//            std::cout << "Vertex " << v << ": " << std::ends;
+//            for (unsigned int vc = 0; vc < Cell::componentsPerVertex; vc++) {
+//                unsigned int bcvidx = c*Cell::numVertices*Cell::componentsPerVertex + v*Cell::componentsPerVertex + vc;
+////                std::cout << "idx: " << bcvidx << ": " << batchVerticesComponents[bcvidx] << ", " << std::ends;
+//                std::cout << batchVerticesComponents[bcvidx] << ", " << std::ends;
+//            }
+//            std::cout << std::endl;
+//        }
 //    }
-
-    std::cout << "Per Cell/Vertex:" << std::endl;
-    for (int c = 0; c < m_Cells.size(); c++) {
-        std::cout << "Vertices for cell: " << c << std::endl;
-        for (int v = 0; v < Cell::numVertices; v++) {
-            std::cout << "Vertex " << v << ": " << std::ends;
-            for (int vc = 0; vc < Cell::positionComponentsPerVertex; vc++) {
-                int bcvidx = c*Cell::numVertices*Cell::positionComponentsPerVertex + v*Cell::positionComponentsPerVertex + vc;
-//                std::cout << "idx: " << bcvidx << ": " << batchVerticesComponents[bcvidx] << ", " << std::ends;
-                std::cout << batchVerticesComponents[bcvidx] << ", " << std::ends;
-            }
-            std::cout << std::endl;
-        }
-    }
-
-
 
     return std::make_unique<VertexBuffer>((float *)batchVerticesComponents, batchVerticesComponentsCount * sizeof(float));
 }
@@ -99,10 +95,10 @@ std::unique_ptr<IndexBuffer> Grid::createBatchIndexBuffer()
         ++cellIdx;
     }
 
-    std::cout << "Batch Indices: " << std::endl;
-    for (int idx = 0; idx < batchIndicesCount; idx++) {
-        std::cout << "Index " << idx << ": " << batchIndices[idx] << std::endl;
-    }
+//    std::cout << "Batch Indices: " << std::endl;
+//    for (int idx = 0; idx < batchIndicesCount; idx++) {
+//        std::cout << "Index " << idx << ": " << batchIndices[idx] << std::endl;
+//    }
 
     return std::make_unique<IndexBuffer>((unsigned int *)batchIndices, batchIndicesCount);
 }
@@ -111,18 +107,14 @@ void Grid::OnRender(Renderer &renderer)
 {
     GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
     GLCall(glClear(GL_COLOR_BUFFER_BIT));
-
+    m_VertexBuffer = std::move(createBatchVertexBuffer());
+    m_VertexArray->AddBuffer(*m_VertexBuffer, m_Layout);
     m_Shader->Bind();
-
-    // TODO: figure out how to set batch uniforms:
-//    for (std::unique_ptr<Cell> &cell: m_Cells) {
-//        m_Shader->SetUniform4f("u_Color", cell->color.r, cell->color.g, cell->color.b, cell->color.alpha);
-//        m_Shader->SetUniform1f("u_Alpha", cell->alpha);
-//    }
-
-    m_Shader->SetUniform4f("u_Color", 0.0f, 0.25f, 1.0f, 1.0f);
-    m_Shader->SetUniform1f("u_Alpha", 1.0f);
-
+    float xTranslateFactor = m_WindowSize.width/2 - ((m_XCells * (m_CellWidth + m_CellSpacing)) / 2);
+    float yTranslateFactor = m_WindowSize.height/2 - ((m_YCells * (m_CellHeight + m_CellSpacing)) / 2);
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(xTranslateFactor, yTranslateFactor, 0.0f));
+    glm::mat4 mvp = m_Proj * m_View * model;
+    m_Shader->SetUniformMat4f("u_MVP", mvp);
     renderer.Draw(*m_VertexArray, *m_IndexBuffer, *m_Shader);
 }
 
@@ -175,7 +167,7 @@ void Grid::setNeighborsForCellsInGrid()
     for (int x = 0; x < m_XCells; x++) {
         for (int y = 0; y < m_YCells; y++) {
             int idx = x + (y * m_XCells);
-            m_Cells[idx]->addNeighbors(getCellNeighbors(x, y));
+            m_Cells[idx]->AddNeighbors(getCellNeighbors(x, y));
         }
     }
 }
