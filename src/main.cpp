@@ -83,7 +83,7 @@ int main()
     ImGui::StyleColorsDark();
 
     unsigned int generation = 0;
-    int gridSize = 100;
+    int gridSize = 250;
     Grid grid(gridSize, gridSize, windowSize);
     grid.RandomState(0.25f);
 

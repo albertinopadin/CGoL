@@ -5,7 +5,9 @@
 
 Grid::Grid(int xCells, int yCells, WindowSize windowSize)
     : m_WindowSize(windowSize), m_XCells(xCells), m_YCells(yCells), m_Generation(0), m_Cells(std::vector<std::unique_ptr<Cell>>()),
-      m_Proj(glm::ortho(0.0f, windowSize.width, 0.0f, windowSize.height, -1.0f, 1.0f)),
+      m_Proj(glm::ortho(0.0f, windowSize.width *  ((yCells * (m_CellHeight + m_CellSpacing)) / m_WindowSize.height),
+                        0.0f, windowSize.height * ((yCells * (m_CellHeight + m_CellSpacing)) / m_WindowSize.height),
+                        -1.0f, 1.0f)),
       m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)))
 {
     initGrid();
@@ -110,9 +112,12 @@ void Grid::OnRender(Renderer &renderer)
     m_VertexBuffer = std::move(createBatchVertexBuffer());
     m_VertexArray->AddBuffer(*m_VertexBuffer, m_Layout);
     m_Shader->Bind();
-    float xTranslateFactor = m_WindowSize.width/2 - ((m_XCells * (m_CellWidth + m_CellSpacing)) / 2);
-    float yTranslateFactor = m_WindowSize.height/2 - ((m_YCells * (m_CellHeight + m_CellSpacing)) / 2);
+    float scaleFactor =  ((m_YCells * (m_CellHeight + m_CellSpacing)) / m_WindowSize.height);
+    float xTranslateFactor = ((m_WindowSize.width * scaleFactor)/2) - ((m_XCells * (m_CellWidth + m_CellSpacing)) / 2);
+    float yTranslateFactor = ((m_WindowSize.height * scaleFactor)/2) - ((m_YCells * (m_CellHeight + m_CellSpacing)) / 2);
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(xTranslateFactor, yTranslateFactor, 0.0f));
+//    float scaleFactor = m_WindowSize.height / (m_YCells * (m_CellHeight + m_CellSpacing));
+//    model *= glm::scale(glm::mat4(1.0f), glm::vec3(scaleFactor, scaleFactor, 0.0f));
     glm::mat4 mvp = m_Proj * m_View * model;
     m_Shader->SetUniformMat4f("u_MVP", mvp);
     renderer.Draw(*m_VertexArray, *m_IndexBuffer, *m_Shader);
