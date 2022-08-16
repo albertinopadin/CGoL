@@ -53,7 +53,7 @@ int main()
     setWindowHints();
 
     /* Create a windowed mode window and its OpenGL context */
-    WindowSize windowSize { 1000, 800 };
+    WindowSize windowSize { 1000, 1000 };
     GLFWwindow* window = glfwCreateWindow(windowSize.width, windowSize.height, "CGoL", NULL, NULL);
 
     if (!window)
@@ -83,7 +83,7 @@ int main()
     ImGui::StyleColorsDark();
 
     unsigned int generation = 0;
-    int gridSize = 250;
+    int gridSize = 400;
     Grid grid(gridSize, gridSize, windowSize);
     grid.RandomState(0.25f);
 

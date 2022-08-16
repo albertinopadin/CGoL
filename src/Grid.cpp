@@ -55,7 +55,7 @@ std::unique_ptr<VertexBuffer> Grid::createBatchVertexBuffer()
 {
     int i = 0;
     unsigned int batchVerticesComponentsCount = m_Cells.size() * Cell::numVertices * Cell::componentsPerVertex;
-    float batchVerticesComponents[batchVerticesComponentsCount];
+    auto *batchVerticesComponents = new float[batchVerticesComponentsCount];
     for (std::unique_ptr<Cell> &cell : m_Cells) {
         for (int vi = 0; vi < Cell::numVertices * Cell::componentsPerVertex; vi++) {
             batchVerticesComponents[i++] = cell->vertices[vi];

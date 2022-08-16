@@ -5,8 +5,8 @@
 #include <memory>
 
 struct WindowSize {
-    float width;
-    float height;
+    int width;
+    int height;
 };
 
 class Grid
