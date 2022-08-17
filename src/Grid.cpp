@@ -36,8 +36,6 @@ Grid::Grid(int xCells, int yCells, WindowSize windowSize)
 
 Grid::~Grid()
 {
-    // Is this correct ???
-//    delete &m_Cells;
 }
 
 void Grid::initGrid()
@@ -54,14 +52,8 @@ void Grid::initGrid()
 
 std::unique_ptr<VertexBuffer> Grid::createBatchVertexBuffer()
 {
-
     unsigned int batchVerticesComponentsCount = m_Cells.size() * Cell::numVertices * Cell::componentsPerVertex;
     auto *batchVerticesComponents = new float[batchVerticesComponentsCount];
-//    for (std::unique_ptr<Cell> &cell : m_Cells) {
-//        for (int vi = 0; vi < Cell::numVertices * Cell::componentsPerVertex; vi++) {
-//            batchVerticesComponents[i++] = cell->vertices[vi];
-//        }
-//    }
 
     // Can't use latest standard parallel for_each in Clang, unfortunately
 #pragma omp parallel for shared(batchVerticesComponents) default(none)
@@ -73,47 +65,52 @@ std::unique_ptr<VertexBuffer> Grid::createBatchVertexBuffer()
         }
     }
 
-//    std::cout << "Batch Vertices: " << std::endl;
-////    for (int idx = 0; idx < batchVerticesComponentsCount; idx++) {
-////        std::cout << "Index " << idx << ": " << batchVerticesComponents[idx] << std::endl;
-////    }
-//
-//    std::cout << "Per Cell/Vertex:" << std::endl;
-//    for (unsigned int c = 0; c < m_Cells.size(); c++) {
-//        std::cout << "Vertices for cell: " << c << std::endl;
-//        for (unsigned int v = 0; v < Cell::numVertices; v++) {
-//            std::cout << "Vertex " << v << ": " << std::ends;
-//            for (unsigned int vc = 0; vc < Cell::componentsPerVertex; vc++) {
-//                unsigned int bcvidx = c*Cell::numVertices*Cell::componentsPerVertex + v*Cell::componentsPerVertex + vc;
-////                std::cout << "idx: " << bcvidx << ": " << batchVerticesComponents[bcvidx] << ", " << std::ends;
-//                std::cout << batchVerticesComponents[bcvidx] << ", " << std::ends;
-//            }
-//            std::cout << std::endl;
-//        }
-//    }
+//    printBatchVertexBuffer(batchVerticesComponents);
 
     return std::make_unique<VertexBuffer>((float *)batchVerticesComponents, batchVerticesComponentsCount * sizeof(float));
 }
 
+void Grid::printBatchVertexBuffer(float *batchVerticesComponents)
+{
+    std::cout << "Batch Vertices: " << std::endl;
+    std::cout << "Per Cell/Vertex:" << std::endl;
+    for (unsigned int c = 0; c < m_Cells.size(); c++) {
+        std::cout << "Vertices for cell: " << c << std::endl;
+        for (unsigned int v = 0; v < Cell::numVertices; v++) {
+            std::cout << "Vertex " << v << ": " << std::ends;
+            for (unsigned int vc = 0; vc < Cell::componentsPerVertex; vc++) {
+                unsigned int bcvidx = c*Cell::numVertices*Cell::componentsPerVertex + v*Cell::componentsPerVertex + vc;
+                std::cout << batchVerticesComponents[bcvidx] << ", " << std::ends;
+            }
+            std::cout << std::endl;
+        }
+    }
+}
+
 std::unique_ptr<IndexBuffer> Grid::createBatchIndexBuffer()
 {
-    int i = 0;
+    int currentIndex = 0;
     int cellIdx = 0;
     unsigned int batchIndicesCount = m_Cells.size() * Cell::numIndices;
     unsigned int batchIndices[batchIndicesCount];
     for (std::unique_ptr<Cell> &cell : m_Cells) {
         for (unsigned int index : cell->indices) {
-            batchIndices[i++] = index + (cellIdx * (Cell::positionComponentsPerVertex + 1));
+            batchIndices[currentIndex++] = index + (cellIdx * (Cell::positionComponentsPerVertex + 1));
         }
         ++cellIdx;
     }
 
-//    std::cout << "Batch Indices: " << std::endl;
-//    for (int idx = 0; idx < batchIndicesCount; idx++) {
-//        std::cout << "Index " << idx << ": " << batchIndices[idx] << std::endl;
-//    }
+//    printBatchIndices(batchIndicesCount, batchIndices);
 
     return std::make_unique<IndexBuffer>((unsigned int *)batchIndices, batchIndicesCount);
+}
+
+void Grid::printBatchIndices(unsigned int batchIndicesCount, unsigned int *batchIndices)
+{
+    std::cout << "Batch Indices: " << std::endl;
+    for (int idx = 0; idx < batchIndicesCount; idx++) {
+        std::cout << "Index " << idx << ": " << batchIndices[idx] << std::endl;
+    }
 }
 
 void Grid::OnRender(Renderer &renderer)

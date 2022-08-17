@@ -42,4 +42,6 @@ private:
     void makeAllLive();
     std::unique_ptr<VertexBuffer> createBatchVertexBuffer();
     std::unique_ptr<IndexBuffer> createBatchIndexBuffer();
+    void printBatchVertexBuffer(float *batchVerticesComponents);
+    static void printBatchIndices(unsigned int batchIndicesCount, unsigned int *batchIndices);
 };
