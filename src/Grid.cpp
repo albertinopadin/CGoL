@@ -1,5 +1,6 @@
 #include "Grid.h"
 
+#include <omp.h>
 #include <iostream>
 
 
@@ -53,12 +54,22 @@ void Grid::initGrid()
 
 std::unique_ptr<VertexBuffer> Grid::createBatchVertexBuffer()
 {
-    int i = 0;
+
     unsigned int batchVerticesComponentsCount = m_Cells.size() * Cell::numVertices * Cell::componentsPerVertex;
     auto *batchVerticesComponents = new float[batchVerticesComponentsCount];
-    for (std::unique_ptr<Cell> &cell : m_Cells) {
-        for (int vi = 0; vi < Cell::numVertices * Cell::componentsPerVertex; vi++) {
-            batchVerticesComponents[i++] = cell->vertices[vi];
+//    for (std::unique_ptr<Cell> &cell : m_Cells) {
+//        for (int vi = 0; vi < Cell::numVertices * Cell::componentsPerVertex; vi++) {
+//            batchVerticesComponents[i++] = cell->vertices[vi];
+//        }
+//    }
+
+    // Can't use latest standard parallel for_each in Clang, unfortunately
+#pragma omp parallel for shared(batchVerticesComponents) default(none)
+    {
+        for (int ci = 0; ci < m_Cells.size(); ci++) {
+            for (int vi = 0; vi < Cell::numVertices * Cell::componentsPerVertex; vi++) {
+                batchVerticesComponents[ci*Cell::numVertices*Cell::componentsPerVertex + vi] = m_Cells[ci]->vertices[vi];
+            }
         }
     }
 
@@ -125,12 +136,26 @@ void Grid::OnRender(Renderer &renderer)
 
 unsigned int Grid::Update()
 {
-    for (std::unique_ptr<Cell> &cell: m_Cells) {
-        cell->PrepareUpdate();
+//    for (std::unique_ptr<Cell> &cell: m_Cells) {
+//        cell->PrepareUpdate();
+//    }
+//
+//    for (std::unique_ptr<Cell> &cell: m_Cells) {
+//        cell->Update();
+//    }
+
+#pragma omp parallel for default(none)
+    {
+        for (std::unique_ptr<Cell> &cell: m_Cells) {
+            cell->PrepareUpdate();
+        }
     }
 
-    for (std::unique_ptr<Cell> &cell: m_Cells) {
-        cell->Update();
+#pragma omp parallel for default(none)
+    {
+        for (std::unique_ptr<Cell> &cell: m_Cells) {
+            cell->Update();
+        }
     }
 
     ++m_Generation;

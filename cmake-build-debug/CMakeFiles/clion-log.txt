@@ -1,6 +1,22 @@
 /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja -S "/Users/albertinopadin/Desktop/Dev/C Projects/CGoL" -B "/Users/albertinopadin/Desktop/Dev/C Projects/CGoL/cmake-build-debug"
+-- The C compiler identification is AppleClang 13.1.6.13160021
+-- The CXX compiler identification is AppleClang 13.1.6.13160021
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found OpenGL: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/OpenGL.framework   
 LIBRARIES = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/OpenGL.framework;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/OpenGL.framework;/opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.3.3.dylib;/opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.3.dylib;/opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.dylib;/opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.0.dylib;/opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.dylib;/opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.dylib
 CGOL_DIR = .
+-- Found OpenMP_C: -Xclang -fopenmp (found version "5.0") 
+-- Found OpenMP_CXX: -Xclang -fopenmp (found version "5.0") 
+-- Found OpenMP: TRUE (found version "5.0")  
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /Users/albertinopadin/Desktop/Dev/C Projects/CGoL/cmake-build-debug

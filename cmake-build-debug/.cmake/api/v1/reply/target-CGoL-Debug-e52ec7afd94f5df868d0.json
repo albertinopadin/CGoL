@@ -12,12 +12,15 @@
 		[
 			"add_executable",
 			"target_link_libraries",
+			"set_property",
+			"find_package",
 			"include_directories",
 			"target_include_directories"
 		],
 		"files" : 
 		[
-			"CMakeLists.txt"
+			"CMakeLists.txt",
+			"/Applications/CLion.app/Contents/bin/cmake/mac/share/cmake-3.23/Modules/FindOpenMP.cmake"
 		],
 		"nodes" : 
 		[
@@ -37,13 +40,35 @@
 				"parent" : 0
 			},
 			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 61,
+				"parent" : 0
+			},
+			{
+				"file" : 1,
+				"parent" : 3
+			},
+			{
 				"command" : 2,
+				"file" : 1,
+				"line" : 585,
+				"parent" : 4
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 63,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
 				"file" : 0,
 				"line" : 20,
 				"parent" : 0
 			},
 			{
-				"command" : 3,
+				"command" : 5,
 				"file" : 0,
 				"line" : 46,
 				"parent" : 0
@@ -59,42 +84,55 @@
 					"fragment" : "-g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk"
 				},
 				{
+					"backtrace" : 6,
+					"fragment" : "-Xclang"
+				},
+				{
+					"backtrace" : 6,
+					"fragment" : "-fopenmp"
+				},
+				{
 					"fragment" : "-std=gnu++20"
 				}
 			],
 			"includes" : 
 			[
 				{
-					"backtrace" : 3,
+					"backtrace" : 7,
 					"path" : "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/OpenGL.framework"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 8,
 					"path" : "/Users/albertinopadin/Desktop/Dev/C Projects/CGoL/."
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 8,
 					"path" : "/Users/albertinopadin/Desktop/Dev/C Projects/CGoL/./src"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 8,
 					"path" : "/opt/homebrew/Cellar/glfw/3.3.8/include"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 8,
 					"path" : "/opt/homebrew/Cellar/glfw/3.3.8/lib"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 8,
 					"path" : "/opt/homebrew/Cellar/glew/2.2.0_1/include"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 8,
 					"path" : "/opt/homebrew/Cellar/glew/2.2.0_1/lib"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 8,
 					"path" : "/Users/albertinopadin/Desktop/Dev/C Projects/CGoL/./src/vendor"
+				},
+				{
+					"backtrace" : 6,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/include"
 				}
 			],
 			"language" : "CXX",
@@ -182,6 +220,11 @@
 			{
 				"backtrace" : 2,
 				"fragment" : "/opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "/opt/homebrew/lib/libomp.dylib",
 				"role" : "libraries"
 			}
 		],
