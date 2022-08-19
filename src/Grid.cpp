@@ -124,8 +124,6 @@ void Grid::OnRender(Renderer &renderer)
     float xTranslateFactor = ((m_WindowSize.width * scaleFactor)/2) - ((m_XCells * (m_CellWidth + m_CellSpacing)) / 2);
     float yTranslateFactor = ((m_WindowSize.height * scaleFactor)/2) - ((m_YCells * (m_CellHeight + m_CellSpacing)) / 2);
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(xTranslateFactor, yTranslateFactor, 0.0f));
-//    float scaleFactor = m_WindowSize.height / (m_YCells * (m_CellHeight + m_CellSpacing));
-//    model *= glm::scale(glm::mat4(1.0f), glm::vec3(scaleFactor, scaleFactor, 0.0f));
     glm::mat4 mvp = m_Proj * m_View * model;
     m_Shader->SetUniformMat4f("u_MVP", mvp);
     renderer.Draw(*m_VertexArray, *m_IndexBuffer, *m_Shader);
@@ -138,14 +136,6 @@ void Grid::OnImGuiRender()
 
 unsigned int Grid::Update()
 {
-//    for (std::unique_ptr<Cell> &cell: m_Cells) {
-//        cell->PrepareUpdate();
-//    }
-//
-//    for (std::unique_ptr<Cell> &cell: m_Cells) {
-//        cell->Update();
-//    }
-
 #pragma omp parallel for default(none)
     {
         for (std::unique_ptr<Cell> &cell: m_Cells) {
