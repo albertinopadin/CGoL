@@ -31,6 +31,7 @@ public:
     ~Grid();
 
     void OnRender(Renderer &renderer);
+    void OnImGuiRender();
     unsigned int Update();
     void Reset();
     void RandomState(float liveProbability);

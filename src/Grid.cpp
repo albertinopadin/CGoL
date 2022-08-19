@@ -1,7 +1,7 @@
 #include "Grid.h"
-
 #include <omp.h>
 #include <iostream>
+#include "imgui/imgui.h"
 
 
 Grid::Grid(int xCells, int yCells, WindowSize windowSize)
@@ -92,7 +92,7 @@ std::unique_ptr<IndexBuffer> Grid::createBatchIndexBuffer()
     int currentIndex = 0;
     int cellIdx = 0;
     unsigned int batchIndicesCount = m_Cells.size() * Cell::numIndices;
-    unsigned int batchIndices[batchIndicesCount];
+    auto *batchIndices = new unsigned int[batchIndicesCount];
     for (std::unique_ptr<Cell> &cell : m_Cells) {
         for (unsigned int index : cell->indices) {
             batchIndices[currentIndex++] = index + (cellIdx * (Cell::positionComponentsPerVertex + 1));
@@ -129,6 +129,11 @@ void Grid::OnRender(Renderer &renderer)
     glm::mat4 mvp = m_Proj * m_View * model;
     m_Shader->SetUniformMat4f("u_MVP", mvp);
     renderer.Draw(*m_VertexArray, *m_IndexBuffer, *m_Shader);
+}
+
+void Grid::OnImGuiRender()
+{
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 }
 
 unsigned int Grid::Update()

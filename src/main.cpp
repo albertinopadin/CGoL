@@ -83,7 +83,7 @@ int main()
     ImGui::StyleColorsDark();
 
     unsigned int generation = 0;
-    int gridSize = 500;
+    int gridSize = 700;
     Grid grid(gridSize, gridSize, windowSize);
     grid.RandomState(0.25f);
 
@@ -99,6 +99,7 @@ int main()
         // Update and then render:
         generation = grid.Update();
         grid.OnRender(renderer);
+        grid.OnImGuiRender();
 
         ImGui::Render();
         ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
