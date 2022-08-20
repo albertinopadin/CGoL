@@ -55,7 +55,7 @@ std::unique_ptr<VertexBuffer> Grid::createBatchVertexBuffer()
     unsigned int batchVerticesComponentsCount = m_Cells.size() * Cell::numVertices * Cell::componentsPerVertex;
     auto *batchVerticesComponents = new float[batchVerticesComponentsCount];
 
-    // Can't use latest standard parallel for_each in Clang, unfortunately
+    // Can't use the latest standard parallel for_each in Clang, unfortunately
 #pragma omp parallel for shared(batchVerticesComponents) default(none)
     {
         for (int ci = 0; ci < m_Cells.size(); ci++) {
@@ -149,6 +149,74 @@ unsigned int Grid::Update()
             cell->Update();
         }
     }
+
+// Similar FPS as above:
+//#pragma omp parallel for default(none)
+//    {
+//        for (int i = 0; i < m_Cells.size(); i++) {
+//            m_Cells[i]->PrepareUpdate();
+//        }
+//    }
+//
+//#pragma omp parallel for default(none)
+//    {
+//        for (int i = 0; i < m_Cells.size(); i++) {
+//            m_Cells[i]->Update();
+//        }
+//    }
+
+// Slower than above:
+//#pragma omp parallel for default(none)
+//    {
+//        for (int x = 0; x < m_XCells; x++) {
+//            for (int y = 0; y < m_YCells; y++) {
+//                m_Cells[x + y*m_XCells]->PrepareUpdate();
+//            }
+//        }
+//    }
+//
+//#pragma omp parallel for default(none)
+//    {
+//        for (int x = 0; x < m_XCells; x++) {
+//            for (int y = 0; y < m_YCells; y++) {
+//                m_Cells[x + y*m_XCells]->Update();
+//            }
+//        }
+//    }
+
+// **** Tried collapse to parallelize both loops, slightly slower than above:
+//#pragma omp parallel for default(none) collapse(2)
+//    {
+//        for (int x = 0; x < m_XCells; x++) {
+//            for (int y = 0; y < m_YCells; y++) {
+//                m_Cells[x + y*m_XCells]->PrepareUpdate();
+//            }
+//        }
+//    }
+//
+//#pragma omp parallel for default(none) collapse(2)
+//    {
+//        for (int x = 0; x < m_XCells; x++) {
+//            for (int y = 0; y < m_YCells; y++) {
+//                m_Cells[x + y*m_XCells]->Update();
+//            }
+//        }
+//    }
+
+// *** VERY SLOW
+//    for (int x = 0; x < m_XCells; x++) {
+//#pragma omp parallel for shared(x) default(none)
+//        for (int y = 0; y < m_YCells; y++) {
+//            m_Cells[x + y*m_XCells]->PrepareUpdate();
+//        }
+//    }
+//
+//    for (int x = 0; x < m_XCells; x++) {
+//#pragma omp parallel for shared(x) default(none)
+//        for (int y = 0; y < m_YCells; y++) {
+//            m_Cells[x + y*m_XCells]->Update();
+//        }
+//    }
 
     ++m_Generation;
     return m_Generation;
