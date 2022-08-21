@@ -5,7 +5,7 @@
 
 Cell::Cell(CellPosition position, CellSize size, CellColor cellColor)
     : alpha(CellAlpha::dead), color(cellColor), alive(false),
-      m_Neighbors(std::vector<std::unique_ptr<Cell>>()), m_CurrentState(CellState::Dead), m_NextState(CellState::Dead),
+      m_Neighbors(std::vector<std::unique_ptr<Cell>>()), m_CurrentState(false), m_NextState(false),
       vertices(InitVertices(position, size, cellColor)), indices {0, 1, 2, 1, 2, 3}
 {
 
@@ -45,16 +45,15 @@ void Cell::PrepareUpdate()
         }
     }
 
-    if (!(m_CurrentState == CellState::Dead && liveNeighbors < 3)) {
-        m_NextState = (m_CurrentState == CellState::Alive && liveNeighbors == 2) ||
-                (liveNeighbors == 3) ? CellState::Alive : CellState::Dead;
+    if (!(!m_CurrentState && liveNeighbors < 3)) {
+        m_NextState = (m_CurrentState && liveNeighbors == 2) || (liveNeighbors == 3);
     }
 }
 
 void Cell::Update()
 {
     if (needsUpdate()) {
-        if (m_NextState == CellState::Alive) {
+        if (m_NextState) {
             MakeLive();
         } else {
             MakeDead();
@@ -64,22 +63,22 @@ void Cell::Update()
     SetAlphaInVertices();
 }
 
-void Cell::SetState(CellState state)
+void Cell::SetState(bool state)
 {
     m_CurrentState = state;
-    alive = m_CurrentState == CellState::Alive;
-    m_NextState = m_CurrentState;
+    alive = state;
+    m_NextState = state;
 }
 
 void Cell::MakeDead()
 {
-    SetState(CellState::Dead);
+    SetState(false);
     alpha = CellAlpha::dead;
 }
 
 void Cell::MakeLive()
 {
-    SetState(CellState::Alive);
+    SetState(true);
     alpha = CellAlpha::live;
 }
 

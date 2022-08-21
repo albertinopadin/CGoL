@@ -6,12 +6,6 @@
 #include "graphics/VertexBuffer.h"
 #include "graphics/VertexBufferLayout.h"
 
-enum CellState
-{
-    Alive = 1,
-    Dead = 0
-};
-
 struct CellAlpha
 {
     constexpr const static float live = 1.0f;
@@ -37,8 +31,8 @@ class Cell
 {
 private:
     std::vector<std::unique_ptr<Cell>> m_Neighbors;
-    CellState m_CurrentState;
-    CellState m_NextState;
+    bool m_CurrentState;
+    bool m_NextState;
 
 public:
     static const unsigned int numVertices = 4;
@@ -59,7 +53,7 @@ public:
     void AddNeighbors(std::vector<std::unique_ptr<Cell>> neighbors);
     void PrepareUpdate();
     void Update();
-    void SetState(CellState state);
+    void SetState(bool state);
     void MakeDead();
     void MakeLive();
     bool needsUpdate();

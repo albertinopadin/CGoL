@@ -118,7 +118,6 @@ void Grid::OnRender(Renderer &renderer)
 {
     GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
     GLCall(glClear(GL_COLOR_BUFFER_BIT));
-    m_VertexBuffer = std::move(createBatchVertexBuffer());
     m_VertexArray->AddBuffer(*m_VertexBuffer, m_Layout);
     m_Shader->Bind();
     float scaleFactor =  ((m_YCells * (m_CellHeight + m_CellSpacing)) / m_WindowSize.height);
@@ -152,6 +151,9 @@ unsigned int Grid::Update()
             cell->Update();
         }
     }
+
+    // Only update vertices here since OnRender is called every frame:
+    m_VertexBuffer = std::move(createBatchVertexBuffer());
 
     ++m_Generation;
     return m_Generation;
