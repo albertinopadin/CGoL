@@ -9,7 +9,8 @@ Grid::Grid(int xCells, int yCells, WindowSize windowSize)
       m_Proj(glm::ortho(0.0f, windowSize.width *  ((yCells * (m_CellHeight + m_CellSpacing)) / m_WindowSize.height),
                         0.0f, windowSize.height * ((yCells * (m_CellHeight + m_CellSpacing)) / m_WindowSize.height),
                         -1.0f, 1.0f)),
-      m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0)))
+      m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0))),
+      m_UpdateSpeed(60)
 {
     initGrid();
     setNeighborsForCellsInGrid();
@@ -131,6 +132,8 @@ void Grid::OnRender(Renderer &renderer)
 
 void Grid::OnImGuiRender()
 {
+    ImGui::LabelText("Generation", "%d", m_Generation);
+    ImGui::SliderInt("Speed",&m_UpdateSpeed, 1, 120);
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 }
 
@@ -258,4 +261,9 @@ void Grid::makeAllLive()
     for (std::unique_ptr<Cell> &cell: m_Cells) {
         cell->MakeLive();
     }
+}
+
+uint64_t Grid::GetUpdateInterval()
+{
+    return (int)(1000 / m_UpdateSpeed);
 }

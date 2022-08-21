@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 
 #include "graphics/Renderer.h"
 #include "graphics/VertexBufferLayout.h"
@@ -41,6 +42,11 @@ void initGlew()
     glewExperimental = GL_TRUE;
     // Initialize GLEW to setup the OpenGL Function pointers
     glewInit();
+}
+
+uint64_t getCurrentTime()
+{
+    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
 int main()
@@ -87,6 +93,8 @@ int main()
     Grid grid(gridSize, gridSize, windowSize);
     grid.RandomState(0.25f);
 
+    uint64_t prevTime = getCurrentTime();
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -97,7 +105,13 @@ int main()
         ImGui_ImplGlfwGL3_NewFrame();
 
         // Update and then render:
-        generation = grid.Update();
+        uint64_t currTime = getCurrentTime();
+        uint64_t updateInterval = grid.GetUpdateInterval();
+        if (currTime - prevTime >= updateInterval) {
+            generation = grid.Update();
+            prevTime = currTime;
+        }
+
         grid.OnRender(renderer);
         grid.OnImGuiRender();
 

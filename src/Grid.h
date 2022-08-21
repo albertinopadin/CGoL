@@ -25,8 +25,10 @@ private:
     std::unique_ptr<IndexBuffer> m_IndexBuffer;
     std::unique_ptr<Shader> m_Shader;
     glm::mat4 m_Proj, m_View;
+    int m_UpdateSpeed;
 
 public:
+
     Grid(int xCells, int yCells, WindowSize windowSize);
     ~Grid();
 
@@ -35,6 +37,7 @@ public:
     unsigned int Update();
     void Reset();
     void RandomState(float liveProbability);
+    uint64_t GetUpdateInterval();
 
 private:
     void initGrid();
