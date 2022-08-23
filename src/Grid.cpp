@@ -137,9 +137,13 @@ void Grid::OnImGuiRender()
         setGameRunning(!running);
     }
 
+    ImGui::SameLine();
+
     if (ImGui::Button("Reset", ImVec2(50, 25))) {
         Reset();
     }
+
+    ImGui::SameLine();
 
     if (ImGui::Button("Randomize", ImVec2(80, 25))) {
         RandomState(0.25f);

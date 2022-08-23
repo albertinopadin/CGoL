@@ -91,7 +91,7 @@ int main()
     unsigned int generation = 0;
     int gridSize = 500;
     Grid grid(gridSize, gridSize, windowSize);
-    grid.RandomState(0.25f);
+//    grid.RandomState(0.25f);
 
     uint64_t prevTime = getCurrentTime();
 

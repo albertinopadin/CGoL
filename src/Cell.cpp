@@ -8,7 +8,7 @@ Cell::Cell(CellPosition position, CellSize size, CellColor cellColor)
       m_Neighbors(std::vector<std::unique_ptr<Cell>>()), m_CurrentState(false), m_NextState(false),
       vertices(InitVertices(position, size, cellColor)), indices {0, 1, 2, 1, 2, 3}
 {
-
+    SetAlphaInVertices();
 }
 
 float *Cell::InitVertices(CellPosition position, CellSize size, CellColor color) {
