@@ -132,7 +132,7 @@ void Grid::OnRender(Renderer &renderer)
 void Grid::OnImGuiRender()
 {
     ImGui::LabelText("Generation", "%d", m_Generation);
-    ImGui::SliderInt("Speed",&m_UpdateSpeed, 1, 120);
+    ImGui::SliderInt("Speed",&m_UpdateSpeed, 1, 60);
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 }
 
