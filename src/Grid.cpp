@@ -10,7 +10,7 @@ Grid::Grid(int xCells, int yCells, WindowSize windowSize)
                         0.0f, windowSize.height * ((yCells * (m_CellHeight + m_CellSpacing)) / m_WindowSize.height),
                         -1.0f, 1.0f)),
       m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0))),
-      m_UpdateSpeed(60)
+      m_UpdateSpeed(60), m_PlayPauseButtonStr("Play"), running(false)
 {
     initGrid();
     setNeighborsForCellsInGrid();
@@ -132,8 +132,32 @@ void Grid::OnRender(Renderer &renderer)
 void Grid::OnImGuiRender()
 {
     ImGui::LabelText("Generation", "%d", m_Generation);
+
+    if (ImGui::Button(m_PlayPauseButtonStr.c_str(), ImVec2(50, 25))) {
+        setGameRunning(!running);
+    }
+
+    if (ImGui::Button("Reset", ImVec2(50, 25))) {
+        Reset();
+    }
+
+    if (ImGui::Button("Randomize", ImVec2(80, 25))) {
+        RandomState(0.25f);
+    }
+
     ImGui::SliderInt("Speed",&m_UpdateSpeed, 1, 60);
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+}
+
+void Grid::setGameRunning(bool shouldRun)
+{
+    if (shouldRun) {
+        running = true;
+        m_PlayPauseButtonStr = "Pause";
+    } else {
+        running = false;
+        m_PlayPauseButtonStr = "Play";
+    }
 }
 
 unsigned int Grid::Update()
@@ -152,8 +176,7 @@ unsigned int Grid::Update()
         }
     }
 
-    // Only update vertices here since OnRender is called every frame:
-    m_VertexBuffer = std::move(createBatchVertexBuffer());
+    setVertexBuffer();
 
     ++m_Generation;
     return m_Generation;
@@ -166,11 +189,14 @@ void Grid::Reset()
     }
 
     m_Generation = 0;
+    setGameRunning(false);
+    setVertexBuffer();
 }
 
 void Grid::RandomState(float liveProbability)
 {
-    // TODO: How to get random number ???
+    Reset();
+
     if (liveProbability > 0.99f) {
         makeAllLive();
     } else {
@@ -187,6 +213,8 @@ void Grid::RandomState(float liveProbability)
             }
         }
     }
+
+    setVertexBuffer();
 }
 
 void Grid::setNeighborsForCellsInGrid()
@@ -265,7 +293,12 @@ void Grid::makeAllLive()
     }
 }
 
-uint64_t Grid::GetUpdateInterval()
+uint64_t Grid::GetUpdateInterval() const
 {
     return (int)(1000 / m_UpdateSpeed);
+}
+
+void Grid::setVertexBuffer()
+{
+    m_VertexBuffer = std::move(createBatchVertexBuffer());
 }

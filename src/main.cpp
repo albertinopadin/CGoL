@@ -106,11 +106,13 @@ int main()
         ImGui_ImplGlfwGL3_NewFrame();
 
         // Update and then render:
-        uint64_t currTime = getCurrentTime();
-        uint64_t updateInterval = grid.GetUpdateInterval();
-        if (currTime - prevTime >= updateInterval) {
-            generation = grid.Update();
-            prevTime = currTime;
+        if (grid.running) {
+            uint64_t currTime = getCurrentTime();
+            uint64_t updateInterval = grid.GetUpdateInterval();
+            if (currTime - prevTime >= updateInterval) {
+                generation = grid.Update();
+                prevTime = currTime;
+            }
         }
 
         grid.OnRender(renderer);

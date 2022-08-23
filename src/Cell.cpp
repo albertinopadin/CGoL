@@ -59,8 +59,6 @@ void Cell::Update()
             MakeDead();
         }
     }
-
-    SetAlphaInVertices();
 }
 
 void Cell::SetState(bool state)
@@ -70,16 +68,18 @@ void Cell::SetState(bool state)
     m_NextState = state;
 }
 
-void Cell::MakeDead()
-{
-    SetState(false);
-    alpha = CellAlpha::dead;
-}
-
 void Cell::MakeLive()
 {
     SetState(true);
     alpha = CellAlpha::live;
+    SetAlphaInVertices();
+}
+
+void Cell::MakeDead()
+{
+    SetState(false);
+    alpha = CellAlpha::dead;
+    SetAlphaInVertices();
 }
 
 void Cell::SetAlphaInVertices() const
