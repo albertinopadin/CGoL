@@ -27,6 +27,7 @@ private:
     glm::mat4 m_Proj, m_View;
     int m_UpdateSpeed;
     std::string m_PlayPauseButtonStr;
+    int m_LiveProbability;
 
 public:
     bool running;

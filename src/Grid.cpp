@@ -10,7 +10,7 @@ Grid::Grid(int xCells, int yCells, WindowSize windowSize)
                         0.0f, windowSize.height * ((yCells * (m_CellHeight + m_CellSpacing)) / m_WindowSize.height),
                         -1.0f, 1.0f)),
       m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0))),
-      m_UpdateSpeed(60), m_PlayPauseButtonStr("Play"), running(false)
+      m_UpdateSpeed(60), m_PlayPauseButtonStr("Play"), running(false), m_LiveProbability(10)
 {
     initGrid();
     setNeighborsForCellsInGrid();
@@ -133,6 +133,8 @@ void Grid::OnImGuiRender()
 {
     ImGui::LabelText("Generation", "%d", m_Generation);
 
+    ImGui::InputInt("Probability", &m_LiveProbability);
+
     if (ImGui::Button(m_PlayPauseButtonStr.c_str(), ImVec2(50, 25))) {
         setGameRunning(!running);
     }
@@ -146,7 +148,7 @@ void Grid::OnImGuiRender()
     ImGui::SameLine();
 
     if (ImGui::Button("Randomize", ImVec2(80, 25))) {
-        RandomState(0.25f);
+        RandomState(((float)m_LiveProbability) / 100.0f);
     }
 
     ImGui::SliderInt("Speed",&m_UpdateSpeed, 1, 60);
