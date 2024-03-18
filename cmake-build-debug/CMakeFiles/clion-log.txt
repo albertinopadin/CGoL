@@ -1,6 +1,0 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/ninja -G Ninja -S "/Users/albertinopadin/Desktop/Dev/C Projects/CGoL" -B "/Users/albertinopadin/Desktop/Dev/C Projects/CGoL/cmake-build-debug"
-LIBRARIES = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/OpenGL.framework;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/System/Library/Frameworks/OpenGL.framework;/opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.3.3.dylib;/opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.3.dylib;/opt/homebrew/Cellar/glfw/3.3.8/lib/libglfw.dylib;/opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.0.dylib;/opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.2.2.dylib;/opt/homebrew/Cellar/glew/2.2.0_1/lib/libGLEW.dylib
-CGOL_DIR = .
--- Configuring done
--- Generating done
--- Build files have been written to: /Users/albertinopadin/Desktop/Dev/C Projects/CGoL/cmake-build-debug

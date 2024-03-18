@@ -7,12 +7,12 @@ find_package(OpenGL REQUIRED)
 set(INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
 
 # Check /opt/homebrew/Cellar/glfw/ for correct version
-set(GLFW_VERSION 3.3.8)
+set(GLFW_VERSION 3.4)
 set(GLEW_VERSION 2.2.0_1)
 set(GLFW_LIBRARIES_GLOB_PATH /opt/homebrew/Cellar/glfw/${GLFW_VERSION}/lib/*.dylib)
 
 file(GLOB GLFW_LIBRARIES ${GLFW_LIBRARIES_GLOB_PATH})
-file(GLOB GLEW_LIBRARIES "/opt/homebrew/Cellar/glew/2.2.0_1/lib/*.dylib")
+file(GLOB GLEW_LIBRARIES "/opt/homebrew/Cellar/glew/${GLEW_VERSION}/lib/*.dylib")
 set(LIBRARIES ${OPENGL_LIBRARIES} ${GLFW_LIBRARIES} ${GLEW_LIBRARIES})
 
 message("LIBRARIES = ${LIBRARIES}")

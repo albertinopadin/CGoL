@@ -1,3 +1,0 @@
-/Users/albertinopadin/Desktop/Dev/C Projects/CGoL/cmake-build-debug/CMakeFiles/CGoL.dir
-/Users/albertinopadin/Desktop/Dev/C Projects/CGoL/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/albertinopadin/Desktop/Dev/C Projects/CGoL/cmake-build-debug/CMakeFiles/rebuild_cache.dir
