@@ -57,12 +57,19 @@ std::unique_ptr<VertexBuffer> Grid::createBatchVertexBuffer()
     auto *batchVerticesComponents = new float[batchVerticesComponentsCount];
 
     // Can't use the latest standard parallel for_each in Clang, unfortunately
+// #pragma omp parallel for shared(batchVerticesComponents) default(none)
+//     {
+//         for (int ci = 0; ci < m_Cells.size(); ci++) {
+//             for (int vi = 0; vi < Cell::numVertices * Cell::componentsPerVertex; vi++) {
+//                 batchVerticesComponents[ci*Cell::numVertices*Cell::componentsPerVertex + vi] = m_Cells[ci]->vertices[vi];
+//             }
+//         }
+//     }
+
 #pragma omp parallel for shared(batchVerticesComponents) default(none)
-    {
-        for (int ci = 0; ci < m_Cells.size(); ci++) {
-            for (int vi = 0; vi < Cell::numVertices * Cell::componentsPerVertex; vi++) {
-                batchVerticesComponents[ci*Cell::numVertices*Cell::componentsPerVertex + vi] = m_Cells[ci]->vertices[vi];
-            }
+    for (int ci = 0; ci < m_Cells.size(); ci++) {
+        for (int vi = 0; vi < Cell::numVertices * Cell::componentsPerVertex; vi++) {
+            batchVerticesComponents[ci*Cell::numVertices*Cell::componentsPerVertex + vi] = m_Cells[ci]->vertices[vi];
         }
     }
 
@@ -168,18 +175,28 @@ void Grid::setGameRunning(bool shouldRun)
 
 unsigned int Grid::Update()
 {
+// #pragma omp parallel for default(none)
+//     {
+//         for (std::unique_ptr<Cell> &cell: m_Cells) {
+//             cell->PrepareUpdate();
+//         }
+//     }
+
+// #pragma omp parallel for default(none)
+//     {
+//         for (std::unique_ptr<Cell> &cell: m_Cells) {
+//             cell->Update();
+//         }
+//     }
+
 #pragma omp parallel for default(none)
-    {
-        for (std::unique_ptr<Cell> &cell: m_Cells) {
-            cell->PrepareUpdate();
-        }
+    for (std::unique_ptr<Cell> &cell: m_Cells) {
+        cell->PrepareUpdate();
     }
 
 #pragma omp parallel for default(none)
-    {
-        for (std::unique_ptr<Cell> &cell: m_Cells) {
-            cell->Update();
-        }
+    for (std::unique_ptr<Cell> &cell: m_Cells) {
+        cell->Update();
     }
 
     setVertexBuffer();

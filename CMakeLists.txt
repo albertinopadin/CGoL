@@ -6,12 +6,11 @@ project(CGoL VERSION 0.1.0)
 find_package(OpenGL REQUIRED)
 set(INCLUDE_DIRS ${OPENGL_INCLUDE_DIR})
 
-# Check /opt/homebrew/Cellar/glfw/ for correct version on macos
-set(GLFW_VERSION 3.4)
-set(GLEW_VERSION 2.2.0_1)
-
 message("CMAKE SYSTEM NAME = ${CMAKE_SYSTEM_NAME}")
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    # Check /opt/homebrew/Cellar/glfw/ for correct version on macos
+    set(GLFW_VERSION 3.4)
+    set(GLEW_VERSION 2.2.0_1)
     set(GLFW_LIBRARIES_GLOB_PATH /opt/homebrew/Cellar/glfw/${GLFW_VERSION}/lib/*.dylib)
     file(GLOB GLFW_LIBRARIES ${GLFW_LIBRARIES_GLOB_PATH})
     file(GLOB GLEW_LIBRARIES "/opt/homebrew/Cellar/glew/${GLEW_VERSION}/lib/*.dylib")
@@ -24,18 +23,20 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 endif ()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    set(GLFW_LIBRARIES_GLOB_PATH "UNKNOWN")
+    set(GLFW_LIBRARIES_GLOB_PATH "/usr/lib/aarch64-linux-gnu/libglfw*")
     file(GLOB GLFW_LIBRARIES ${GLFW_LIBRARIES_GLOB_PATH})
-    file(GLOB GLEW_LIBRARIES "UNKNOWN")
+    file(GLOB GLEW_LIBRARIES "/usr/lib/aarch64-linux-gnu/libGLEW*")
 
-    set(GLFW_INCLUDE_DIR "UNKNOWN")
-    set(GLFW_LIB_DIR "UNKNOWN")
+    set(GLFW_INCLUDE_DIR "/usr/include/GLFW")
+    set(GLFW_LIB_DIR "/usr/lib/aarch64-linux-gnu/")
 
-    set(GLEW_INCLUDE_DIR "UNKNOWN")
-    set(GLEW_LIB_DIR "UNKNOWN")
+    set(GLEW_INCLUDE_DIR "/usr/include/GL/")
+    set(GLEW_LIB_DIR "/usr/lib/aarch64-linux-gnu/")
 endif ()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    set(GLFW_VERSION 3.4)
+    set(GLEW_VERSION 2.2.0_1)
     set(GLFW_LIBRARIES_GLOB_PATH "UNKNOWN")
     file(GLOB GLFW_LIBRARIES ${GLFW_LIBRARIES_GLOB_PATH})
     file(GLOB GLEW_LIBRARIES "UNKNOWN")
