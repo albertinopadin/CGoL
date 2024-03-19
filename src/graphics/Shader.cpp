@@ -7,11 +7,9 @@
 
 
 Shader::Shader(const std::string& filepath)
-    : m_FilePath(filepath), m_RendererID(0)
+    : m_FilePath(filepath), m_RendererID(1)
 {
     ShaderProgramSource source = ParseShader(filepath);
-    // If running program from different folder than 'test-cpp', need to specify full path:
-    // ShaderProgramSource source = ParseShader("/Users/albertinopadin/Desktop/Dev/C Projects/CGoL/test-cpp/resources/shaders/Basic.shader");
     PrintParsedShaders(source);
     m_RendererID = CreateShader(source.VertexSource, source.FragmentSource);
 }

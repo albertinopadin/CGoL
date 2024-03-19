@@ -25,7 +25,7 @@ Grid::Grid(int xCells, int yCells, WindowSize windowSize)
 
     m_IndexBuffer = createBatchIndexBuffer();
 
-    m_Shader = std::make_unique<Shader>("../resources/shaders/Basic.shader");
+    m_Shader = std::make_unique<Shader>("Basic.shader");
     m_Shader->Bind();
 
     std::cout << "m_Cells size: " << m_Cells.size() << std::endl;

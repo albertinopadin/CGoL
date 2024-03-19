@@ -69,7 +69,11 @@ set(SOURCES ${PROJECT_SOURCES} ${PROJECT_GRAPHICS_SOURCES} ${VENDOR_SOURCES} ${H
 set(PROJECT_SRC_DIR ${CGOL_DIR}/src)
 set(VENDOR_INCLUDE_DIR ${CGOL_DIR}/src/vendor)
 
-add_executable(${PROJECT_NAME} ${SOURCES})
+set(RESOURCE_FILES "resources/shaders/Basic.shader")
+
+add_executable(${PROJECT_NAME}
+        ${SOURCES}
+        ${RESOURCE_FILES})
 
 target_include_directories(
     ${PROJECT_NAME} 
@@ -90,3 +94,8 @@ find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
     target_link_libraries(${PROJECT_NAME} PUBLIC OpenMP::OpenMP_CXX)
 endif()
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+        MACOSX_BUNDLE TRUE
+        MACOSX_FRAMEWORK_IDENTIFIER org.tino.CGoL
+        RESOURCE "${RESOURCE_FILES}")
