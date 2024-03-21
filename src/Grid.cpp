@@ -1,6 +1,7 @@
 #include "Grid.h"
 #include <omp.h>
 #include <iostream>
+#include <filesystem>
 #include "imgui/imgui.h"
 
 
@@ -25,6 +26,8 @@ Grid::Grid(int xCells, int yCells, WindowSize windowSize)
 
     m_IndexBuffer = createBatchIndexBuffer();
 
+    std::filesystem::path executablePath = std::filesystem::current_path();
+    std::cout << "[Grid] Executable Path: " << executablePath.string() << std::endl;
     m_Shader = std::make_unique<Shader>("Basic.shader");
     m_Shader->Bind();
 
@@ -57,15 +60,6 @@ std::unique_ptr<VertexBuffer> Grid::createBatchVertexBuffer()
     auto *batchVerticesComponents = new float[batchVerticesComponentsCount];
 
     // Can't use the latest standard parallel for_each in Clang, unfortunately
-// #pragma omp parallel for shared(batchVerticesComponents) default(none)
-//     {
-//         for (int ci = 0; ci < m_Cells.size(); ci++) {
-//             for (int vi = 0; vi < Cell::numVertices * Cell::componentsPerVertex; vi++) {
-//                 batchVerticesComponents[ci*Cell::numVertices*Cell::componentsPerVertex + vi] = m_Cells[ci]->vertices[vi];
-//             }
-//         }
-//     }
-
 #pragma omp parallel for shared(batchVerticesComponents) default(none)
     for (int ci = 0; ci < m_Cells.size(); ci++) {
         for (int vi = 0; vi < Cell::numVertices * Cell::componentsPerVertex; vi++) {
@@ -73,11 +67,10 @@ std::unique_ptr<VertexBuffer> Grid::createBatchVertexBuffer()
         }
     }
 
-//    printBatchVertexBuffer(batchVerticesComponents);
-
     return std::make_unique<VertexBuffer>((float *)batchVerticesComponents, batchVerticesComponentsCount * sizeof(float));
 }
 
+// For debugging:
 void Grid::printBatchVertexBuffer(float *batchVerticesComponents)
 {
     std::cout << "Batch Vertices: " << std::endl;
@@ -107,8 +100,6 @@ std::unique_ptr<IndexBuffer> Grid::createBatchIndexBuffer()
         }
         ++cellIdx;
     }
-
-//    printBatchIndices(batchIndicesCount, batchIndices);
 
     return std::make_unique<IndexBuffer>((unsigned int *)batchIndices, batchIndicesCount);
 }
@@ -175,20 +166,6 @@ void Grid::setGameRunning(bool shouldRun)
 
 unsigned int Grid::Update()
 {
-// #pragma omp parallel for default(none)
-//     {
-//         for (std::unique_ptr<Cell> &cell: m_Cells) {
-//             cell->PrepareUpdate();
-//         }
-//     }
-
-// #pragma omp parallel for default(none)
-//     {
-//         for (std::unique_ptr<Cell> &cell: m_Cells) {
-//             cell->Update();
-//         }
-//     }
-
 #pragma omp parallel for default(none)
     for (std::unique_ptr<Cell> &cell: m_Cells) {
         cell->PrepareUpdate();
