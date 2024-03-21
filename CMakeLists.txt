@@ -34,6 +34,18 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(GLEW_LIB_DIR "/usr/lib/aarch64-linux-gnu")
 endif ()
 
+if (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
+    set(GLFW_LIBRARIES_GLOB_PATH "/usr/local/lib/libglfw*")
+    file(GLOB GLFW_LIBRARIES ${GLFW_LIBRARIES_GLOB_PATH})
+    file(GLOB GLEW_LIBRARIES "/usr/local/lib/libGLEW*")
+
+    set(GLFW_INCLUDE_DIR "/usr/local/include/GLFW")
+    set(GLFW_LIB_DIR "/usr/local/lib")
+
+    set(GLEW_INCLUDE_DIR "/usr/local/include/GL")
+    set(GLEW_LIB_DIR "/usr/local/lib")
+endif ()
+
 if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(GLFW_VERSION 3.4)
     set(GLEW_VERSION 2.2.0_1)
@@ -105,7 +117,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_FRAMEWORK_IDENTIFIER org.tino.CGoL
         RESOURCE "${RESOURCE_FILES}")
 
-if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/resources/shaders/* $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endif ()
