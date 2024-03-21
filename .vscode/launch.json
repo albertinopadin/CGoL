@@ -8,9 +8,9 @@
             "name": "Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/test-cpp/a.out",
+            "program": "${workspaceFolder}/build/CGoL",
             "args": [],
-            "cwd": "${workspaceFolder}/test-cpp"
+            "cwd": "${workspaceFolder}/build"
         }
     ]
 }

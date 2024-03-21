@@ -28,10 +28,10 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     file(GLOB GLEW_LIBRARIES "/usr/lib/aarch64-linux-gnu/libGLEW*")
 
     set(GLFW_INCLUDE_DIR "/usr/include/GLFW")
-    set(GLFW_LIB_DIR "/usr/lib/aarch64-linux-gnu/")
+    set(GLFW_LIB_DIR "/usr/lib/aarch64-linux-gnu")
 
-    set(GLEW_INCLUDE_DIR "/usr/include/GL/")
-    set(GLEW_LIB_DIR "/usr/lib/aarch64-linux-gnu/")
+    set(GLEW_INCLUDE_DIR "/usr/include/GL")
+    set(GLEW_LIB_DIR "/usr/lib/aarch64-linux-gnu")
 endif ()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
@@ -70,7 +70,10 @@ set(SOURCES ${PROJECT_SOURCES} ${PROJECT_GRAPHICS_SOURCES} ${VENDOR_SOURCES} ${H
 set(PROJECT_SRC_DIR ${CGOL_DIR}/src)
 set(VENDOR_INCLUDE_DIR ${CGOL_DIR}/src/vendor)
 
-set(RESOURCE_FILES "resources/shaders/Basic.shader")
+set(RESOURCE_FILES 
+    "resources/shaders/Basic.shader"
+    "LICENSE"
+    "README.md")
 
 add_executable(${PROJECT_NAME}
         ${SOURCES}
@@ -100,3 +103,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_BUNDLE TRUE
         MACOSX_FRAMEWORK_IDENTIFIER org.tino.CGoL
         RESOURCE "${RESOURCE_FILES}")
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/resources/shaders/* $<TARGET_FILE_DIR:${PROJECT_NAME}>)   
