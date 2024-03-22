@@ -51,19 +51,25 @@ uint64_t getCurrentTime()
 
 int main()
 {
+    std::cout << "Starting CGoL..." << std::endl;
+
+    std::cout << "Initializing GLFW..." << std::endl;
     /* Initialize the library */
     if (!glfwInit()) {
         return -1;
     }
 
+    std::cout << "Setting window hints..." << std::endl;
     setWindowHints();
 
+    std::cout << "Creating GLFW window..." << std::endl;
     /* Create a windowed mode window and its OpenGL context */
     WindowSize windowSize { 1000, 1000 };
     GLFWwindow* window = glfwCreateWindow(windowSize.width, windowSize.height, "CGoL", NULL, NULL);
 
     if (!window)
     {
+        std::cout << "GLFW window init failed, terminating!" << std::endl;
         glfwTerminate();
         return -1;
     }

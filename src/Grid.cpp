@@ -1,8 +1,13 @@
 #include "Grid.h"
 #include <omp.h>
 #include <iostream>
-#include <filesystem>
 #include "imgui/imgui.h"
+
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
 
 
 Grid::Grid(int xCells, int yCells, WindowSize windowSize)
@@ -26,9 +31,11 @@ Grid::Grid(int xCells, int yCells, WindowSize windowSize)
 
     m_IndexBuffer = createBatchIndexBuffer();
 
-    std::filesystem::path executablePath = std::filesystem::current_path();
-    std::cout << "[Grid] Executable Path: " << executablePath.string() << std::endl;
-    m_Shader = std::make_unique<Shader>("Basic.shader");
+    // std::filesystem::path executablePath = std::filesystem::current_path();
+    // std::cout << "[Grid] Executable Path: " << executablePath.string() << std::endl;
+    std::filesystem::path executablePath = GetExeDirectory();
+    std::filesystem::path shaderPath = executablePath.append("Basic.shader");
+    m_Shader = std::make_unique<Shader>(shaderPath.string());
     m_Shader->Bind();
 
     std::cout << "m_Cells size: " << m_Cells.size() << std::endl;
@@ -40,6 +47,20 @@ Grid::Grid(int xCells, int yCells, WindowSize windowSize)
 
 Grid::~Grid()
 {
+}
+
+std::filesystem::path Grid::GetExeDirectory() {
+#ifdef __APPLE__
+    return "";
+#else
+    char szPath[PATH_MAX];
+    ssize_t count = readlink("/proc/self/exe", szPath, PATH_MAX);
+    if (count < 0 || count >= PATH_MAX) {
+        return {}; // Error!
+    }
+    szPath[count] = '\0';
+    return std::filesystem::path(szPath);
+#endif
 }
 
 void Grid::initGrid()
