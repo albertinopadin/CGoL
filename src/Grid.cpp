@@ -51,7 +51,7 @@ Grid::~Grid()
 
 std::filesystem::path Grid::GetExeDirectory() {
 #ifdef __APPLE__
-    return "";
+    return {""};
 #else
     char szPath[PATH_MAX];
     ssize_t count = readlink("/proc/self/exe", szPath, PATH_MAX);

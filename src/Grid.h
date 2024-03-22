@@ -44,7 +44,7 @@ public:
     uint64_t GetUpdateInterval() const;
 
 private:
-    std::filesystem::path GetExeDirectory();
+    static std::filesystem::path GetExeDirectory();
     void initGrid();
     void setNeighborsForCellsInGrid();
     [[nodiscard]] std::vector<std::unique_ptr<Cell>> getCellNeighbors(int x, int y) const;
