@@ -73,7 +73,7 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
     GLCall(glGetShaderiv(id, GL_COMPILE_STATUS, &result));
     if (result == GL_FALSE)
     {
-        // Shader did not compile succesfully
+        // Shader did not compile successfully
         int length;
         GLCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length));
         char* message = (char*)alloca(length * sizeof(char)); // Allocate on the stack dynamically

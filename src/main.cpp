@@ -87,7 +87,7 @@ int main()
 
     printOpenGLVersion();
 
-    GLCall(glEnable(GL_BLEND));                                             // Enable blending
+    GLCall(glEnable(GL_BLEND));                                            // Enable blending
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));   // Setting blending function
 
     Renderer renderer;
@@ -99,7 +99,6 @@ int main()
     unsigned int generation = 0;
     int gridSize = 500;
     Grid grid(gridSize, gridSize, windowSize);
-//    grid.RandomState(0.25f);
 
     uint64_t prevTime = getCurrentTime();
 

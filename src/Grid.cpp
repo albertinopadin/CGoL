@@ -31,8 +31,6 @@ Grid::Grid(int xCells, int yCells, WindowSize windowSize)
 
     m_IndexBuffer = createBatchIndexBuffer();
 
-    // std::filesystem::path executablePath = std::filesystem::current_path();
-    // std::cout << "[Grid] Executable Path: " << executablePath.string() << std::endl;
     std::filesystem::path executablePath = GetExeDirectory();
 
     #ifdef __APPLE__
