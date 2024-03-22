@@ -34,7 +34,15 @@ Grid::Grid(int xCells, int yCells, WindowSize windowSize)
     // std::filesystem::path executablePath = std::filesystem::current_path();
     // std::cout << "[Grid] Executable Path: " << executablePath.string() << std::endl;
     std::filesystem::path executablePath = GetExeDirectory();
-    std::filesystem::path shaderPath = executablePath.append("Basic.shader");
+
+    #ifdef __APPLE__
+    std::string shaderName = "BasicMac.shader";
+    #else
+    std::string shaderName = "BasicLinux.shader";
+    #endif
+
+    std::filesystem::path shaderPath = executablePath.append(shaderName);
+    std::cout << "[Grid] Shader Path: " << shaderPath.string() << std::endl;
     m_Shader = std::make_unique<Shader>(shaderPath.string());
     m_Shader->Bind();
 
@@ -59,7 +67,7 @@ std::filesystem::path Grid::GetExeDirectory() {
         return {}; // Error!
     }
     szPath[count] = '\0';
-    return std::filesystem::path(szPath);
+    return std::filesystem::path(szPath).parent_path();
 #endif
 }
 

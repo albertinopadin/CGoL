@@ -42,7 +42,6 @@ public:
          //static_assert(false, "Uninplemented");
     }
 
-    // template<typename T>
     template<>
     void Push<float>(unsigned int count)
     {
@@ -56,7 +55,6 @@ public:
         m_Stride += count * VertexBufferElement::GetSizeOfType(GL_FLOAT);
     }
 
-    // template<typename T>
     template<>
     void Push<unsigned int>(unsigned int count)
     {
@@ -70,7 +68,6 @@ public:
         m_Stride += count * VertexBufferElement::GetSizeOfType(GL_UNSIGNED_INT);
     }
 
-    // template<typename T>
     template<>
     void Push<unsigned char>(unsigned int count)
     {

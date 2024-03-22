@@ -71,7 +71,8 @@ set(PROJECT_SRC_DIR ${CGOL_DIR}/src)
 set(VENDOR_INCLUDE_DIR ${CGOL_DIR}/src/vendor)
 
 set(RESOURCE_FILES 
-    "resources/shaders/Basic.shader"
+    "resources/shaders/BasicMac.shader"
+    "resources/shaders/BasicLinux.shader"
     "LICENSE"
     "README.md")
 
