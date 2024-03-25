@@ -59,8 +59,14 @@ std::filesystem::path Grid::GetExeDirectory() {
 #ifdef __APPLE__
     return {""};
 #else
+    #ifdef __FreeBSD__
+    std::string readLinkPath = "/proc/curproc/file";
+    #elif __linux__
+    std::string readLinkPath = "/proc/self/exe";
+    #endif
+    
     char szPath[PATH_MAX];
-    ssize_t count = readlink("/proc/self/exe", szPath, PATH_MAX);
+    ssize_t count = readlink(readLinkPath.c_str(), szPath, PATH_MAX);
     if (count < 0 || count >= PATH_MAX) {
         return {}; // Error!
     }
